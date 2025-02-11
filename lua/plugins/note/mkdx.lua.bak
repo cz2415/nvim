@@ -1,0 +1,11 @@
+return {
+    "SidOfc/mkdx",
+    ft = "markdown",
+    config = function()
+        vim.g["mkdx#settings"] = {
+            map = {
+                prefix = "<localleader>"
+            }
+        }
+    end
+}
