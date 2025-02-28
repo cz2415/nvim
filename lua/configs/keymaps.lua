@@ -34,7 +34,6 @@ map("n", "<A-H>", ":vertical resize -1<CR>", opts)
 map("n", "<A-L>", ":vertical resize +1<CR>", opts)
 
 map("n", "<A-z>", ":set wrap!<CR>", opts)
-map("n", "<leader>sc", ":set nohlsearch!<CR>", opts)
 
 -- go to last change
 map("n", "ga", "`.", opts)
@@ -46,6 +45,7 @@ wk.add(
         {"==", "<cmd>Format<cr>", desc = "Format", mode = "n"},
         {"zn", "<cmd>NoNeckPain<cr>", desc = "Toggle neck mode", mode = "n"},
         {"<leader>o", "<cmd>Navbuddy<cr>", desc = "Outline"},
+        -- buffer
         {"<leader>b", group = "Buffer"},
         {"<leader>bC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others"},
         {"<leader>bb", "<cmd>Telescope buffers<CR>", desc = "Switch Buffer"},
@@ -55,17 +55,20 @@ wk.add(
         {"<leader>bk", "<cmd>BufferLineCloseRight<cr>", desc = "Close Right"},
         {"<leader>bl", "<cmd>BufferLineMoveNext<cr>", desc = "Move Next"},
         {"<leader>bp", "<cmd>BufferLinePick<cr>", desc = "Buffer Pick"},
+        -- file
         {"<leader>f", group = "File"},
         {"<leader>fT", "<cmd>NvimTreeFindFile<cr>", desc = "Find In Tree"},
         {"<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File"},
         {"<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep"},
         {"<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags"},
         {"<leader>fn", "<cmd>enew<cr>", desc = "New File"},
-        {"<leader>fp", "<cmd>Telescope projects<cr>", desc = "Switch Project"},
+        {"<leader>fp", "<cmd>NeovimProjectDiscover<cr>", desc = "Switch Project"},
         {"<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files"},
         {"<leader>ft", "<cmd>NvimTreeFocus<cr>", desc = "File Tree"},
+        -- quit
         {"<leader>q", group = "Quit"},
         {"<leader>qq", "<cmd>qall<cr>", desc = "Quit All"},
+        -- run
         {"<leader>r", group = "Run Code"},
         {
             "<leader>rC",
@@ -84,7 +87,12 @@ wk.add(
         {"<c-t>2", "<cmd>2ToggleTerm<cr>", desc = "2st Term"},
         {"<c-t>3", "<cmd>3ToggleTerm<cr>", desc = "3st Term"},
         {"<c-t>4", "<cmd>4ToggleTerm<cr>", desc = "4st Term"},
-        {"<c-t>5", "<cmd>5ToggleTerm<cr>", desc = "5st Term"}
+        {"<c-t>5", "<cmd>5ToggleTerm<cr>", desc = "5st Term"},
+        -- search
+        {"<leader>s", group = "Search"},
+        {"<leader>sc", "<cmd>set nohlsearch!<cr>", desc = "No Hlsearch"},
+        {"<leader>sf", "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%') } })<cr>", desc = "Search Current Buffer"},
+        {"<leader>sp", "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.getcwd() } })<cr>", desc = "Search Project"}
     }
 )
 
@@ -129,26 +137,48 @@ vim.api.nvim_create_autocmd(
 vim.api.nvim_create_autocmd(
     {"FileType"},
     {
-        pattern = {"help", "crunner", "dap-repl", "checkhealth", "qf"},
+        pattern = {"help", "crunner", "dap-repl", "checkhealth", "qf", "grug-far"},
         callback = function()
-            wk.add({{"q", "<cmd>q<cr>", desc = "Close Buffer", buffer = 0}})
+            wk.add({{"q", "<cmd>bd<cr>", desc = "Close Buffer", buffer = 0}})
         end
     }
 )
 
 -- lsp & dap key config
 vim.api.nvim_create_autocmd(
-    {"FileType"},
+    "LspAttach",
     {
-        pattern = {"typescript", "typescriptreact", "typescript.tsx", "javascriptreact", "javascript", "lua", "java"},
-        callback = function()
+        callback = function(args)
+            local bufnr = args.buf
+
+            -- 支持的文件类型
+            local filetypes = {
+                "typescript",
+                "typescriptreact",
+                "typescript.tsx",
+                "javascriptreact",
+                "javascript",
+                "python",
+                "lua",
+                "java",
+                "vue"
+            }
+
+            -- 检查文件类型
+            local ft = vim.bo[bufnr].filetype
+            if not vim.tbl_contains(filetypes, ft) then
+                return
+            end
+
+            -- 设置快捷键
             wk.add(
                 {
                     {"g", group = "go to "},
                     {"gd", "<cmd>lua vim.lsp.buf.definition()<cr>", desc = "go to definition"},
-                    {"ge", "vim.diagnostic.goto_next", desc = "go to next diagnostic"},
-                    {"gE", "vim.diagnostic.goto_prev", desc = "go to prev diagnostic"},
-                    {"<leader>c", group = "Code"},
+                    {"ge", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "go to next diagnostic"},
+                    {"gE", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "go to prev diagnostic"},
+                    {"<leader>c", group = "code"},
+                    {"<leader>cc", "<cmd>:lua vim.lsp.buf.code_action()<cr>", desc = "code action"},
                     {"<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "rename"},
                     {"<leader>d", group = "debug"},
                     {
@@ -158,7 +188,8 @@ vim.api.nvim_create_autocmd(
                         end,
                         desc = "toggle breakpoint"
                     }
-                }
+                },
+                {buffer = bufnr}
             )
         end
     }
