@@ -46,6 +46,14 @@ wk.add(
         {"zn", "<cmd>NoNeckPain<cr>", desc = "Toggle neck mode", mode = "n"},
         {"<leader>o", "<cmd>Navbuddy<cr>", desc = "Outline"},
         -- buffer
+        {"<leader>a", group = "AI"},
+        {"<leader>aa", "<cmd>AvanteAsk<cr>", desc = "Ask AI about your code", mode = "v"},
+        {"<leader>ae", "<cmd>AvanteEdit<cr>", desc = "Edit the selected code blocks", mode = "v"},
+        {"<leader>ac", "<cmd>AvanteChat<cr>", desc = "Start a chat session"},
+        {"<leader>af", "<cmd>AvanteFocus<cr>", desc = "Switch focus to/from the sidebar"},
+        {"<leader>ar", "<cmd>AvanteRefresh<cr>", desc = "Refresh all Avante windows"},
+        {"<leader>at", "<cmd>AvanteToggle<cr>", desc = "Toggle the Avante sidebar"},
+        -- buffer
         {"<leader>b", group = "Buffer"},
         {"<leader>bC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others"},
         {"<leader>bb", "<cmd>Telescope buffers<CR>", desc = "Switch Buffer"},
@@ -91,8 +99,16 @@ wk.add(
         -- search
         {"<leader>s", group = "Search"},
         {"<leader>sc", "<cmd>set nohlsearch!<cr>", desc = "No Hlsearch"},
-        {"<leader>sf", "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%') } })<cr>", desc = "Search Current Buffer"},
-        {"<leader>sp", "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.getcwd() } })<cr>", desc = "Search Project"}
+        {
+            "<leader>sf",
+            "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%') } })<cr>",
+            desc = "Search Current Buffer"
+        },
+        {
+            "<leader>sp",
+            "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.getcwd() } })<cr>",
+            desc = "Search Project"
+        }
     }
 )
 
@@ -137,7 +153,7 @@ vim.api.nvim_create_autocmd(
 vim.api.nvim_create_autocmd(
     {"FileType"},
     {
-        pattern = {"help", "crunner", "dap-repl", "checkhealth", "qf", "grug-far"},
+        pattern = {"help", "crunner", "dap-repl", "checkhealth", "qf", "grug-far", "AvanteInput"},
         callback = function()
             wk.add({{"q", "<cmd>bd<cr>", desc = "Close Buffer", buffer = 0}})
         end
