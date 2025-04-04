@@ -72,7 +72,7 @@ wk.add(
         {"<leader>fn", "<cmd>enew<cr>", desc = "New File"},
         {"<leader>fp", "<cmd>NeovimProjectDiscover<cr>", desc = "Switch Project"},
         {"<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files"},
-        {"<leader>ft", "<cmd>NvimTreeFocus<cr>", desc = "File Tree"},
+        {"<leader>ft", "<cmd>NvimTreeToggle<cr>", desc = "Toggle File Tree"},
         -- quit
         {"<leader>q", group = "Quit"},
         {"<leader>qq", "<cmd>qall<cr>", desc = "Quit All"},

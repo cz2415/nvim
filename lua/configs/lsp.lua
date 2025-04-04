@@ -114,26 +114,44 @@ nvim_lsp.marksman.setup(
     }
 )
 
-local root_dir = nvim_lsp.util.root_pattern("pom.xml", "build.gradle", ".git")
-
-nvim_lsp.jdtls.setup(
-    {
-        cmd = {
-            "jdtls",
-            "-data",
-        },
-        root_dir = root_dir,
-        on_attach = on_attach,
-        capabilities = capabilities,
-        filetypes = {"java"},
-        settings = {
-            java = {
-                configuration = {
-                    runtimes = {
-                        {name = "Java21", path = "D:\\software\\portable\\Java\\21\\bin\\java.exe"} -- 指定 JDK 路径
-                    }
-                }
-            }
-        }
-    }
-)
+-- local root_dir = nvim_lsp.util.root_pattern("pom.xml", "build.gradle", ".git")
+-- nvim_lsp.jdtls.setup(
+--     {
+--         cmd = {
+--             "jdtls",
+--             "-data",
+--             "D:/chen/code/.jdtls/"
+--         },
+--         root_dir = root_dir,
+--         on_attach = on_attach,
+--         capabilities = capabilities,
+--         filetypes = {"java"},
+--         settings = {
+--             java = {
+--                 configuration = {
+--                     runtimes = {
+--                         {
+--                             name = "JavaSE-21",
+--                             path = "D:/software/portable/Java/21",
+--                             default = true
+--                         }
+--                     }
+--                 },
+--                 maven = {
+--                     userSettings = "D:/software/portable/apache-maven-3.6.3/conf/settings.xml"
+--                 },
+--                 implementationsCodeLens = {
+--                     enabled = true -- 启用实现代码镜头
+--                 },
+--                 referencesCodeLens = {
+--                     enabled = true -- 启用引用代码镜头
+--                 }
+--             }
+--         },
+--         init_options = {
+--             bundles = {
+--                 "D:/chen/code/tools/lombok.jar"
+--             } -- 可添加 Lombok 等扩展包
+--         }
+--     }
+-- )
