@@ -87,7 +87,16 @@ nvim_lsp.eslint.setup(
 nvim_lsp.pylsp.setup(
     {
         on_attach = on_attach,
-        filetypes = {"python"}
+        filetypes = {"python"},
+        settings = {
+            pylsp = {
+                plugins = {
+                    mccabe = {enabled = false},
+                    pycodestyle = {enabled = false},
+                    pyflakes = {enabled = false}
+                }
+            }
+        }
     }
 )
 

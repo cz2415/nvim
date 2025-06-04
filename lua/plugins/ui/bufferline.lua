@@ -1,7 +1,10 @@
 return {
     "akinsho/bufferline.nvim",
     vsersion = "*",
-    dependencies = "nvim-tree/nvim-web-devicons",
+    dependencies = {
+        "nvim-tree/nvim-web-devicons",
+        {"tiagovla/scope.nvim", config = true}
+    },
     event = "VeryLazy",
     init = function()
         local opt = {noremap = true, silent = true}
@@ -12,10 +15,12 @@ return {
         require("bufferline").setup(
             {
                 options = {
+                    mode = "buffers",
+                    separator_style = "slant",
                     indicator = {
                         icon = "┃",
                         style = "icon"
-                    },
+                    }
                 }
             }
         )
