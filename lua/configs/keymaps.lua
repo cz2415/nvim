@@ -120,135 +120,135 @@ vim.api.nvim_create_autocmd(
         callback = function()
             wk.add(
                 {
-                    {"<Localleader>r", group = "Rest"},
+                    -- {"<Localleader>r", group = "Rest"},
                     {
-                        "<Localleader>rb",
+                        "<Localleader>b",
                         function()
                             require("kulala").scratchpad()
                         end,
                         desc = "Open scratchpad"
                     },
                     {
-                        "<Localleader>ro",
+                        "<Localleader>o",
                         function()
                             require("kulala").open()
                         end,
                         desc = "Open kulala"
                     },
                     {
-                        "<Localleader>rt",
+                        "<Localleader>t",
                         function()
                             require("kulala").toggle_view()
                         end,
                         desc = "Toggle headers/body"
                     },
                     {
-                        "<Localleader>rS",
+                        "<Localleader>S",
                         function()
                             require("kulala").show_stats()
                         end,
                         desc = "Show stats"
                     },
                     {
-                        "<Localleader>rq",
+                        "<Localleader>q",
                         function()
                             require("kulala").close()
                         end,
                         desc = "Close window"
                     },
                     {
-                        "<Localleader>rc",
+                        "<Localleader>c",
                         function()
                             require("kulala").copy()
                         end,
                         desc = "Copy as cURL"
                     },
                     {
-                        "<Localleader>rC",
+                        "<Localleader>C",
                         function()
                             require("kulala").from_curl()
                         end,
                         desc = "Paste from curl"
                     },
                     {
-                        "<Localleader>rs",
+                        "<Localleader>s",
                         function()
                             require("kulala").run()
                         end,
                         desc = "Send request"
                     },
                     {
-                        "<Localleader>ra",
+                        "<Localleader>a",
                         function()
                             require("kulala").run_all()
                         end,
                         desc = "Send all requests"
                     },
                     {
-                        "<Localleader>ri",
+                        "<Localleader>i",
                         function()
                             require("kulala").inspect()
                         end,
                         desc = "Inspect current request"
                     },
                     {
-                        "<Localleader>rr",
+                        "<Localleader>r",
                         function()
                             require("kulala").replay()
                         end,
                         desc = "Replay the last request"
                     },
                     {
-                        "<Localleader>rf",
+                        "<Localleader>f",
                         function()
                             require("kulala").search()
                         end,
                         desc = "Find request"
                     },
                     {
-                        "<Localleader>rn",
+                        "<Localleader>n",
                         function()
                             require("kulala").jump_next()
                         end,
                         desc = "Jump to next request"
                     },
                     {
-                        "<Localleader>rp",
+                        "<Localleader>p",
                         function()
                             require("kulala").jump_prev()
                         end,
                         desc = "Jump to previous request"
                     },
                     {
-                        "<Localleader>re",
+                        "<Localleader>e",
                         function()
                             require("kulala").set_selected_env()
                         end,
                         desc = "Select environment"
                     },
                     {
-                        "<Localleader>ru",
+                        "<Localleader>u",
                         function()
                             require("lua.kulala.ui.auth_manager").open_auth_config()
                         end,
                         desc = "Manage Auth Config"
                     },
                     {
-                        "<Localleader>rg",
+                        "<Localleader>g",
                         function()
                             require("kulala").download_graphql_schema()
                         end,
                         desc = "Download GraphQL schema"
                     },
                     {
-                        "<Localleader>rx",
+                        "<Localleader>x",
                         function()
                             require("kulala").scripts_clear_global()
                         end,
                         desc = "Clear globals"
                     },
                     {
-                        "<Localleader>rX",
+                        "<Localleader>X",
                         function()
                             require("kulala").clear_cached_files()
                         end,
