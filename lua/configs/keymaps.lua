@@ -77,7 +77,8 @@ wk.add({
 	{ "<leader>fp", "<cmd>NeovimProjectDiscover<cr>", desc = "Switch Project" },
 	{ "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
 	{ "<leader>ft", "<cmd>NvimTreeToggle<cr>", desc = "Toggle File Tree" },
-	{ "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", desc = "Mini files" },
+	{ "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", desc = "Mini Files" },
+	{ "<leader>fM", "<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>", desc = "Mini Files Find" },
 	-- quit
 	{ "<leader>q", group = "Quit" },
 	{ "<leader>qq", "<cmd>qall<cr>", desc = "Quit All" },
@@ -266,13 +267,92 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 		map("n", "<C-l>", ":MkdnTab<cr>", opts)
 		map("n", "<C-h>", ":MkdnSTab<cr>", opts)
 		wk.add({
-			{ "<Localleader>t", group = "Table" },
-			{ "<Localleader>tc", ":MkdnTable", desc = "Create Table", buffer = 0 },
-			{ "<Localleader>tf", "<cmd>MkdnTableFormat<cr>", desc = "Table Format", buffer = 0 },
-			{ "<Localleader>ti", "<cmd>MkdnTableNewColBefore<cr>", desc = "New Col Before", buffer = 0 },
-			{ "<Localleader>ta", "<cmd>MkdnTableNewColAfter<cr>", desc = "New Col After", buffer = 0 },
-			{ "<Localleader>to", "<cmd>MkdnTableNewRowBelow<cr>", desc = "New Row Below", buffer = 0 },
-			{ "<Localleader>tO", "<cmd>MkdnTableNewRowAbove<cr>", desc = "New Row Above", buffer = 0 },
+			-- table
+			{ "<Localleader>T", group = "Table" },
+			{ "<Localleader>Tc", ":MkdnTable", desc = "Create Table", buffer = 0 },
+			{ "<Localleader>Tf", "<cmd>MkdnTableFormat<cr>", desc = "Table Format", buffer = 0 },
+			{ "<Localleader>Ti", "<cmd>MkdnTableNewColBefore<cr>", desc = "New Col Before", buffer = 0 },
+			{ "<Localleader>Ta", "<cmd>MkdnTableNewColAfter<cr>", desc = "New Col After", buffer = 0 },
+			{ "<Localleader>To", "<cmd>MkdnTableNewRowBelow<cr>", desc = "New Row Below", buffer = 0 },
+			{ "<Localleader>TO", "<cmd>MkdnTableNewRowAbove<cr>", desc = "New Row Above", buffer = 0 },
+			-- todo
+			{ "<Localleader>t", group = "Todo" },
+			{
+				"<Localleader>ta",
+				"<cmd>Checkmate archive<CR>",
+				desc = "Archive checked/completed todo items (move to bottom section)",
+				buffer = 0,
+			},
+			{ "<Localleader>tc", "<cmd>Checkmate check<CR>", desc = "Set todo item as checked (done)", buffer = 0 },
+			{ "<Localleader>tn", "<cmd>Checkmate create<CR>", desc = "Create todo item", buffer = 0 },
+			{
+				"<Localleader>tR",
+				"<cmd>Checkmate remove_all_metadata<CR>",
+				desc = "Remove all metadata from a todo item",
+				buffer = 0,
+			},
+			{ "<Localleader>tt", "<cmd>Checkmate toggle<CR>", desc = "Toggle todo item", buffer = 0 },
+			{
+				"<Localleader>tu",
+				"<cmd>Checkmate uncheck<CR>",
+				desc = "Set todo item as unchecked (not done)",
+				buffer = 0,
+			},
+			{
+				"<Localleader>tv",
+				"<cmd>Checkmate metadata select_value<CR>",
+				desc = "Update the value of a metadata tag under the cursor",
+				buffer = 0,
+			},
+			{
+				"<Localleader>t=",
+				"<cmd>Checkmate cycle_next<CR>",
+				desc = "Cycle todo item(s) to the next state",
+				buffer = 0,
+			},
+			{
+				"<Localleader>t-",
+				"<cmd>Checkmate cycle_previous<CR>",
+				desc = "Cycle todo item(s) to the previous state",
+				buffer = 0,
+			},
+			{
+				"<Localleader>t]",
+				"<cmd>Checkmate metadata jump_next<CR>",
+				desc = "Move cursor to next metadata tag",
+				buffer = 0,
+			},
+			{
+				"<Localleader>t[",
+				"<cmd>Checkmate metadata jump_previous<CR>",
+				desc = "Move cursor to previous metadata tag",
+				buffer = 0,
+			},
+			{
+				"<Localleader>td",
+				function()
+					require("checkmate").toggle_metadata("done")
+				end,
+				desc = "Toggle '@done' metadata",
+				buffer = 0,
+			},
+			{
+				"<Localleader>tp",
+				function()
+					require("checkmate").toggle_metadata("priority")
+				end,
+				desc = "Toggle '@priority' metadata",
+				buffer = 0,
+			},
+			{
+				"<Localleader>ts",
+				function()
+					require("checkmate").toggle_metadata("started")
+				end,
+				desc = "Toggle '@started' metadata",
+				buffer = 0,
+			},
+			-- other
 			{ "<Localleader>d", "<cmd>MkdnToggleToDo<cr>", desc = "Toggle ToDo", buffer = 0 },
 			{ "<Localleader>n", "<cmd>MkdnUpdateNumbering<cr>", desc = "Update Number", buffer = 0 },
 			{ "<cr>", "<cmd>MkdnNewListItem<cr>", desc = "New ListItem", mode = "i", buffer = 0 },
