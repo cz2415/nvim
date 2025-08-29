@@ -129,6 +129,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").scratchpad()
 				end,
 				desc = "Open scratchpad",
+				buffer = 0,
 			},
 			{
 				"<Localleader>o",
@@ -136,6 +137,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").open()
 				end,
 				desc = "Open kulala",
+				buffer = 0,
 			},
 			{
 				"<Localleader>t",
@@ -143,6 +145,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").toggle_view()
 				end,
 				desc = "Toggle headers/body",
+				buffer = 0,
 			},
 			{
 				"<Localleader>S",
@@ -150,6 +153,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").show_stats()
 				end,
 				desc = "Show stats",
+				buffer = 0,
 			},
 			{
 				"<Localleader>q",
@@ -157,6 +161,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").close()
 				end,
 				desc = "Close window",
+				buffer = 0,
 			},
 			{
 				"<Localleader>c",
@@ -164,6 +169,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").copy()
 				end,
 				desc = "Copy as cURL",
+				buffer = 0,
 			},
 			{
 				"<Localleader>C",
@@ -171,6 +177,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").from_curl()
 				end,
 				desc = "Paste from curl",
+				buffer = 0,
 			},
 			{
 				"<Localleader>s",
@@ -178,6 +185,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").run()
 				end,
 				desc = "Send request",
+				buffer = 0,
 			},
 			{
 				"<Localleader>a",
@@ -185,6 +193,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").run_all()
 				end,
 				desc = "Send all requests",
+				buffer = 0,
 			},
 			{
 				"<Localleader>i",
@@ -192,6 +201,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").inspect()
 				end,
 				desc = "Inspect current request",
+				buffer = 0,
 			},
 			{
 				"<Localleader>r",
@@ -199,6 +209,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").replay()
 				end,
 				desc = "Replay the last request",
+				buffer = 0,
 			},
 			{
 				"<Localleader>f",
@@ -206,6 +217,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").search()
 				end,
 				desc = "Find request",
+				buffer = 0,
 			},
 			{
 				"<Localleader>n",
@@ -213,6 +225,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").jump_next()
 				end,
 				desc = "Jump to next request",
+				buffer = 0,
 			},
 			{
 				"<Localleader>p",
@@ -220,6 +233,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").jump_prev()
 				end,
 				desc = "Jump to previous request",
+				buffer = 0,
 			},
 			{
 				"<Localleader>e",
@@ -227,6 +241,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").set_selected_env()
 				end,
 				desc = "Select environment",
+				buffer = 0,
 			},
 			{
 				"<Localleader>u",
@@ -234,6 +249,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("lua.kulala.ui.auth_manager").open_auth_config()
 				end,
 				desc = "Manage Auth Config",
+				buffer = 0,
 			},
 			{
 				"<Localleader>g",
@@ -241,6 +257,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").download_graphql_schema()
 				end,
 				desc = "Download GraphQL schema",
+				buffer = 0,
 			},
 			{
 				"<Localleader>x",
@@ -248,6 +265,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").scripts_clear_global()
 				end,
 				desc = "Clear globals",
+				buffer = 0,
 			},
 			{
 				"<Localleader>X",
@@ -255,6 +273,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").clear_cached_files()
 				end,
 				desc = "Clear cached files",
+				buffer = 0,
 			},
 		})
 	end,
@@ -275,6 +294,11 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 			{ "<Localleader>Ta", "<cmd>MkdnTableNewColAfter<cr>", desc = "New Col After", buffer = 0 },
 			{ "<Localleader>To", "<cmd>MkdnTableNewRowBelow<cr>", desc = "New Row Below", buffer = 0 },
 			{ "<Localleader>TO", "<cmd>MkdnTableNewRowAbove<cr>", desc = "New Row Above", buffer = 0 },
+			-- preview
+			{ "<Localleader>p", group = "Preview" },
+			{ "<Localleader>pp", "<cmd>MarkdownPreview<cr>", desc = "Markdown Preview Start", buffer = 0 },
+			{ "<Localleader>ps", "<cmd>MarkdownPreviewStop<cr>", desc = "Markdown Preview Stop", buffer = 0 },
+			{ "<Localleader>pt", "<cmd>MarkdownPreviewToggle<cr>", desc = "Markdown Preview Toggle", buffer = 0 },
 			-- todo
 			{ "<Localleader>t", group = "Todo" },
 			{
