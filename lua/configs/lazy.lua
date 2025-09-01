@@ -19,7 +19,8 @@ require("lazy").setup(
             {import = "plugins/code"},
             {import = "plugins/common"},
             {import = "plugins/note"},
-            {import = "plugins/ui"}
+            {import = "plugins/ui"},
+            {import = "plugins/chen"}
         },
         change_detection = {
             -- automatically check for config file changes and reload the ui
