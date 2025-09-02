@@ -36,35 +36,11 @@ local on_attach = function(client, bufnr)
 	)
 end
 
--- nvim_lsp.lua_ls.setup({
--- 	on_attach = on_attach,
--- 	filetypes = { "lua" },
--- 	settings = {
--- 		Lua = {
--- 			diagnostics = {
--- 				globals = { "vim" },
--- 			},
--- 		},
--- 	},
--- })
-
-nvim_lsp.lua_ls.setup({
-	on_attach = on_attach,
-	filetypes = { "lua" },
+vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
-			runtime = {
-				version = "LuaJIT", -- Neovim 用的就是 LuaJIT
-			},
 			diagnostics = {
-				globals = { "vim" }, -- 告诉 LSP 不要报 undefined
-			},
-			workspace = {
-				library = vim.api.nvim_get_runtime_file("", true), -- 加载 Neovim runtime
-				checkThirdParty = false, -- 不弹第三方库的提示
-			},
-			telemetry = {
-				enable = false,
+				globals = { "vim" },
 			},
 		},
 	},
