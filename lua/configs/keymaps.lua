@@ -392,9 +392,17 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 	end,
 })
 
+-- for sql
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = "sql",
+	callback = function()
+		wk.add({ { "[13;5u", "<cmd>JdbcRun<cr>", desc = "Jdbc Run", mode = "n", buffer = 0 } })
+	end,
+})
+
 -- close with q
 vim.api.nvim_create_autocmd({ "FileType" }, {
-	pattern = { "help", "crunner", "dap-repl", "checkhealth", "qf", "grug-far", "AvanteInput" },
+	pattern = { "help", "crunner", "dap-repl", "checkhealth", "qf", "grug-far", "AvanteInput", "JdbcResult" },
 	callback = function()
 		wk.add({ { "q", "<cmd>bd<cr>", desc = "Close Buffer", buffer = 0 } })
 	end,

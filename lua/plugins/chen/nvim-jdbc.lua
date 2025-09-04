@@ -1,9 +1,7 @@
 return {
 	"nvim-jdbc",
-	dir = "D:\\chen\\code\\lua\\nvim-jdbc\\",
+	dir = "D:\\chen\\code\\nvim-jdbc\\nvim-jdbc-lua",
 	config = function()
-		require("nvim-jdbc").setup({
-			keymap = "<leader>hello",
-		})
+		require("nvim-jdbc").setup()
 	end,
 }
