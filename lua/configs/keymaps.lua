@@ -441,6 +441,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			{ "<leader>c", group = "code" },
 			{ "<leader>cc", "<cmd>:lua vim.lsp.buf.code_action()<cr>", desc = "code action" },
 			{ "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "rename" },
+
 			{ "<leader>d", group = "debug" },
 			{
 				"<leader>dt",
@@ -449,6 +450,26 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				end,
 				desc = "toggle breakpoint",
 			},
+			{
+				"<leader>du",
+				function()
+					require("dapui").toggle()
+				end,
+				desc = "Toggle DAP UI",
+			},
+			{
+				"<leader>de",
+				function()
+					require("dapui").eval()
+				end,
+				desc = "Eval expression",
+			},
+
+			{ "<C-k>", '<cmd>lua require("dap").continue()<cr>', desc = "Continue" },
+			{ "<C-j>", '<cmd>lua require("dap").step_over<cr>', desc = "Step Over" },
+			{ "<C-l>", '<cmd>lua require("dap").step_into()<cr>', desc = "Step Into" },
+			{ "<C-h>", '<cmd>lua require("dap").step_out()<cr>', desc = "Step Out" },
+
 		}, { buffer = bufnr })
 	end,
 })

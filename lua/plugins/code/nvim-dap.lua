@@ -10,26 +10,25 @@ return {
 				require("nvim-dap-virtual-text").setup()
 			end,
 		},
-		{
-			"rcarriga/nvim-dap-ui",
-			config = function()
-				local dap, dapui = require("dap"), require("dapui")
-				dapui.setup()
-				dap.listeners.after.event_initialized["dapui_config"] = function()
-					dapui.open()
-				end
-				dap.listeners.before.event_terminated["dapui_config"] = function()
-					dapui.close()
-				end
-				dap.listeners.before.event_exited["dapui_config"] = function()
-					dapui.close()
-				end
-			end,
-		},
+		"rcarriga/nvim-dap-ui", -- 这里不再写 config
 	},
-	keys = {},
 	config = function()
 		local dap = require("dap")
+		local dapui = require("dapui")
+
+		--  dap-ui 初始化
+		dapui.setup()
+
+		--  自动打开/关闭 UI
+		dap.listeners.after.event_initialized["dapui_config"] = function()
+			dapui.open()
+		end
+		dap.listeners.before.event_terminated["dapui_config"] = function()
+			dapui.close()
+		end
+		dap.listeners.before.event_exited["dapui_config"] = function()
+			dapui.close()
+		end
 
 		-- break point config
 		vim.api.nvim_set_hl(0, "DapBreakpoint", { ctermbg = 0, fg = "#993939", bg = "#31353f" })
@@ -55,43 +54,6 @@ return {
 		vim.fn.sign_define(
 			"DapStopped",
 			{ text = "›", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" }
-		)
-
-		-- key
-		-- 配置常见的 DAP 操作快捷键
-		vim.api.nvim_set_keymap("n", "<C-k>", ':lua require("dap").continue()<CR>', { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", "<C-j>", ':lua require("dap").step_over()<CR>', { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", "<C-l>", ':lua require("dap").step_into()<CR>', { noremap = true, silent = true })
-		vim.api.nvim_set_keymap("n", "<C-h>", ':lua require("dap").step_out()<CR>', { noremap = true, silent = true })
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>b",
-			':lua require("dap").toggle_breakpoint()<CR>',
-			{ noremap = true, silent = true }
-		)
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>B",
-			':lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>',
-			{ noremap = true, silent = true }
-		)
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>lp",
-			':lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>',
-			{ noremap = true, silent = true }
-		)
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>dr",
-			':lua require("dap").repl.open()<CR>',
-			{ noremap = true, silent = true }
-		)
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>dl",
-			':lua require("dap").run_last()<CR>',
-			{ noremap = true, silent = true }
 		)
 
 		dap.adapters["pwa-node"] = {
