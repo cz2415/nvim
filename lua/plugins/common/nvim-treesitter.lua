@@ -9,6 +9,7 @@ return {
 			indent = { enable = true },
 			incremental_selection = { enable = true },
 			ensure_installed = {
+                "sql",
 				"html",
 				"css",
 				"java",

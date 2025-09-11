@@ -396,7 +396,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	pattern = "sql",
 	callback = function()
-		wk.add({ { "[13;5u", "<cmd>JdbcRun<cr>", desc = "Jdbc Run", mode = "n", buffer = 0 } })
+		wk.add({ { "[13;5u", "<cmd>JdbcRun<cr>", desc = "Jdbc Run", mode = { "n", "i" }, buffer = 0 } })
 	end,
 })
 
@@ -439,7 +439,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			{ "ge", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "go to next diagnostic" },
 			{ "gE", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "go to prev diagnostic" },
 			{ "<leader>c", group = "code" },
-			{ "<leader>cc", "<cmd>:lua vim.lsp.buf.code_action()<cr>", desc = "code action" },
+			{ "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "code action" },
 			{ "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "rename" },
 
 			{ "<leader>d", group = "debug" },
@@ -466,10 +466,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			},
 
 			{ "<C-k>", '<cmd>lua require("dap").continue()<cr>', desc = "Continue" },
-			{ "<C-j>", '<cmd>lua require("dap").step_over<cr>', desc = "Step Over" },
+			{ "<C-j>", '<cmd>lua require("dap").step_over()<cr>', desc = "Step Over" },
 			{ "<C-l>", '<cmd>lua require("dap").step_into()<cr>', desc = "Step Into" },
 			{ "<C-h>", '<cmd>lua require("dap").step_out()<cr>', desc = "Step Out" },
-
 		}, { buffer = bufnr })
 	end,
 })
