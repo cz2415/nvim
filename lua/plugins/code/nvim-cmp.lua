@@ -33,7 +33,6 @@ return {
 				end,
 			},
 			sources = {
-				{ name = "jdbc" },
 				{ name = "path" },
 				{ name = "buffer" },
 				{ name = "nvim_lsp" },
@@ -59,7 +58,7 @@ return {
 						buffer = "Ω",
 						nvim_lsp = "λ",
 						luasnip = "⋗",
-                        jdbc ="🛢"
+						jdbc = "🛢",
 					}
 					item.menu = menu_icon[entry.source.name]
 					return item
@@ -93,6 +92,13 @@ return {
 				{ name = "git" }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
 			}, {
 				{ name = "buffer" },
+			}),
+		})
+
+		-- 只在 sql 文件启用 jdbc
+		cmp.setup.filetype("sql", {
+			sources = cmp.config.sources({
+				{ name = "jdbc" },
 			}),
 		})
 

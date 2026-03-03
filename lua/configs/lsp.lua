@@ -3,8 +3,7 @@ if not status then
 	return
 end
 
-local on_attach = function(client, bufnr)
-end
+local on_attach = function(client, bufnr) end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local status_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
@@ -38,7 +37,7 @@ vim.lsp.config("lua_ls", {
 	},
 })
 
-nvim_lsp.ts_ls.setup({
+vim.lsp.config("ts_ls", {
 	init_options = {
 		plugins = {
 			{
@@ -52,7 +51,7 @@ nvim_lsp.ts_ls.setup({
 	filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "html" },
 })
 
-nvim_lsp.volar.setup({
+vim.lsp.config("volar", {
 	init_options = {
 		vue = {
 			hybridMode = false,
@@ -60,12 +59,12 @@ nvim_lsp.volar.setup({
 	},
 })
 
-nvim_lsp.eslint.setup({
+vim.lsp.config("eslint", {
 	on_attach = on_attach,
 	filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "html" },
 })
 
-nvim_lsp.pylsp.setup({
+vim.lsp.config("pylsp", {
 	on_attach = on_attach,
 	filetypes = { "python" },
 	settings = {
@@ -79,21 +78,23 @@ nvim_lsp.pylsp.setup({
 	},
 })
 
-nvim_lsp.html.setup({
+vim.lsp.config("html", {
 	on_attach = on_attach,
 	filetypes = { "html" },
 })
 
-nvim_lsp.cssls.setup({
+vim.lsp.config("cssls", {
 	capabilities = require("cmp_nvim_lsp").default_capabilities(),
 	on_attach = on_attach,
 	filetypes = { "css" },
 })
 
-nvim_lsp.marksman.setup({
+vim.lsp.config("marksman", {
 	on_attach = on_attach,
 	filetypes = { "markdown" },
 })
+
+vim.lsp.enable({ "lua_ls", "ts_ls", "volar", "eslint", "pylsp", "html", "cssls", "marksman" })
 
 -- local root_dir = nvim_lsp.util.root_pattern("pom.xml", "build.gradle", ".git")
 -- nvim_lsp.jdtls.setup(
