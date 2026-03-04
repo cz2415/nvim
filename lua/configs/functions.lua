@@ -8,18 +8,22 @@ function CloseAllFloating()
 	end
 end
 
--- toggle gitgui
+-- toggle lazygit
 local Terminal = require("toggleterm.terminal").Terminal
-local gitui = Terminal:new({
-	cmd = "gitui",
+local lazygit = Terminal:new({
+	cmd = "lazygit",
 	direction = "float",
-	on_open = function()
-		-- Stuff here
-	end,
 	hidden = true,
+	on_open = function(term)
+		vim.schedule(function()
+			if vim.api.nvim_buf_is_valid(term.bufnr) then
+				vim.cmd("startinsert!")
+			end
+		end)
+	end,
 })
-vim.api.nvim_create_user_command("ToggletermGitui", function()
-	gitui:toggle()
+vim.api.nvim_create_user_command("ToggletermLazygit", function()
+	lazygit:toggle()
 end, { bang = true })
 
 local function get_term_index(current_id, terms)

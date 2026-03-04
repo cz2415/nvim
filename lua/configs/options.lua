@@ -21,6 +21,7 @@ vim.opt.autochdir = true
 vim.opt.wildmode = "list:longest,full"
 vim.opt.langmenu = en_US
 vim.opt.wrap = false
+vim.opt.swapfile = false
 vim.opt.laststatus = 3
 vim.opt.cmdheight = 0
 

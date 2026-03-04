@@ -14,8 +14,8 @@ map("i", "<C-v>", "<C-r><C-o>+", opts)
 map("v", "<", "<gv", opts)
 map("v", ">", ">gv", opts)
 
--- use <Esc> to exit terminal-mode
-map("t", "<Esc>", [[<C-\><C-n>]], opts)
+-- use <c-c> to exit terminal-mode
+map("t", "<c-c>", [[<C-\><C-n>]], opts)
 
 -- windows navigate, ALT+{h,j,k,l}
 map("t", "<A-h>", [[<C-\><C-N><C-w>h]], opts)
@@ -92,16 +92,21 @@ wk.add({
 		desc = "Debug Code",
 	},
 	{ "<leader>rc", "<cmd>RunCode<cr>", desc = "Run Current" },
-	{ "<c-t>", group = "Terminal" },
-	{ "<c-t>t", "<cmd>ToggleTerm<cr>", desc = "Toggle Term" },
-	{ "<c-t>s", "<cmd>TermSelect<cr>", desc = "Select Term" },
-	{ "<c-t>r", "<cmd>ToggleTermSetName<cr>", desc = "Rename Term" },
-	{ "<c-t>g", "<cmd>ToggletermGitui<cr>", desc = "gitui" },
-	{ "<c-t>1", "<cmd>1ToggleTerm<cr>", desc = "1st Term" },
-	{ "<c-t>2", "<cmd>2ToggleTerm<cr>", desc = "2st Term" },
-	{ "<c-t>3", "<cmd>3ToggleTerm<cr>", desc = "3st Term" },
-	{ "<c-t>4", "<cmd>4ToggleTerm<cr>", desc = "4st Term" },
-	{ "<c-t>5", "<cmd>5ToggleTerm<cr>", desc = "5st Term" },
+	-- terminal
+	-- { "<c-t>", group = "Terminal" },
+	-- { "<c-t>t", "<cmd>ToggleTerm<cr>", desc = "Toggle Term" },
+	-- { "<c-t>s", "<cmd>TermSelect<cr>", desc = "Select Term" },
+	-- { "<c-t>r", "<cmd>ToggleTermSetName<cr>", desc = "Rename Term" },
+	-- { "<c-t>g", "<cmd>ToggletermLazygit<cr>", desc = "gitui" },
+	-- { "<c-t>1", "<cmd>1ToggleTerm<cr>", desc = "1st Term" },
+	-- { "<c-t>2", "<cmd>2ToggleTerm<cr>", desc = "2st Term" },
+	-- { "<c-t>3", "<cmd>3ToggleTerm<cr>", desc = "3st Term" },
+	-- { "<c-t>4", "<cmd>4ToggleTerm<cr>", desc = "4st Term" },
+	-- { "<c-t>5", "<cmd>5ToggleTerm<cr>", desc = "5st Term" },
+	{ "<c-t>", "<cmd>ToggleTerm<cr>", desc = "LazyGit", mode = "n" },
+	{ "<c-g>", "<cmd>ToggletermLazygit<cr>", desc = "LazyGit", mode = "n" },
+	{ "<c-g>", [[<C-\><C-n><cmd>ToggletermLazygit<CR>]], desc = "LazyGit", mode = "t" },
+
 	-- search
 	{ "<leader>s", group = "Search" },
 	{ "<leader>sc", "<cmd>set nohlsearch!<cr>", desc = "No Hlsearch" },
@@ -396,7 +401,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	pattern = "sql",
 	callback = function()
-		wk.add({ { "[13;5u", "<cmd>JdbcRun<cr>", desc = "Jdbc Run", mode = { "n", "i" }, buffer = 0 } })
+		wk.add({ { "<Localleader>r", "<cmd>JdbcRun<cr>", desc = "Jdbc Run", mode = { "n", "v", "i" }, buffer = 0 } })
 	end,
 })
 
