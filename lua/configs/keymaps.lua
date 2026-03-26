@@ -30,9 +30,10 @@ map("n", "<A-l>", [[<C-w>l]], opts)
 -- resize window
 map("n", "<A-J>", ":resize -1<CR>", opts)
 map("n", "<A-K>", ":resize +1<CR>", opts)
-map("n", "<A-H>", ":vertical resize -1<CR>", opts)
-map("n", "<A-L>", ":vertical resize +1<CR>", opts)
+map("n", "<A-H>", ":vertical resize +1<CR>", opts)
+map("n", "<A-L>", ":vertical resize -1<CR>", opts)
 
+-- toggle wrap
 map("n", "<A-z>", ":set wrap!<CR>", opts)
 
 -- go to last change
@@ -427,7 +428,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			"javascript",
 			"python",
 			"lua",
-			"java",
+			-- "java",
 			"vue",
 		}
 
