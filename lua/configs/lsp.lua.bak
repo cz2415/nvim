@@ -1,0 +1,35 @@
+vim.lsp.config("ts_ls", {
+	init_options = {
+		plugins = {
+			{
+				name = "@vue/typescript-plugin",
+				location = vim.fn.exepath("vue-language-server"),
+				languages = { "vue" },
+			},
+		},
+	},
+	on_attach = function() end,
+	filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "html" },
+})
+
+-- vim.lsp.config("vtsls", {
+-- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
+-- 	filetypes = {
+-- 		"typescript",
+-- 		"javascript",
+-- 		"javascriptreact",
+-- 		"typescriptreact",
+-- 		"vue",
+-- 	},
+-- })
+
+vim.lsp.config("vue_ls", {
+	init_options = {
+		vue = {
+			hybridMode = false,
+		},
+	},
+})
+
+vim.lsp.enable({ "lua_ls", "ts_ls", "vue_ls", "eslint", "pylsp", "html", "cssls", "marksman" })
