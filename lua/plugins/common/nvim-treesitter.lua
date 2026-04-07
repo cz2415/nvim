@@ -1,31 +1,45 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
-	version = false,
+	lazy = false,
 	build = ":TSUpdate",
-	event = { "BufReadPost", "BufNewFile" },
+	init = function()
+		vim.env.CC = "gcc"
+	end,
 	config = function()
-		require("nvim-treesitter.configs").setup({
-			highlight = { enable = true, additional_vim_regex_highlighting = false },
-			indent = { enable = true },
-			incremental_selection = { enable = true },
-			ensure_installed = {
-                "sql",
-				"html",
-				"css",
-				"java",
-				"javascript",
-				"json",
-				"lua",
-				"vue",
-				"luadoc",
-				"luap",
-				"markdown",
-				"markdown_inline",
-				"python",
-				"vim",
-				"vimdoc",
-				"http",
-			},
+		local ft = {
+			"sql",
+			"html",
+			"css",
+			"java",
+			"javascript",
+			"json",
+			"lua",
+			"vue",
+			"luadoc",
+			"luap",
+			"markdown",
+			"markdown_inline",
+			"python",
+			"vim",
+			"vimdoc",
+			"http",
+		}
+
+		local treesitter = require("nvim-treesitter")
+		treesitter.setup()
+		treesitter.install(ft)
+
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = ft,
+			callback = function()
+				-- syntax highlighting, provided by Neovim
+				vim.treesitter.start()
+				-- folds, provided by Neovim (I don't like folds)
+				-- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+				-- vim.wo.foldmethod = 'expr'
+				-- indentation, provided by nvim-treesitter
+				vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+			end,
 		})
 	end,
 }

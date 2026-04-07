@@ -1,3 +1,5 @@
+local M = {}
+
 -- close all floating
 function CloseAllFloating()
 	for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -81,3 +83,21 @@ end, { desc = "Toggle term" })
 vim.keymap.set({ "n", "t" }, "<F8>", function()
 	go_next_term()
 end, { desc = "Toggle term" })
+
+local saved_layout = nil
+M.toggle_maximize = function()
+	if saved_layout then
+		-- 恢复布局
+		-- vim.cmd(saved_layout)
+		vim.cmd("wincmd =")
+		saved_layout = nil
+	else
+		-- 保存布局
+		saved_layout = vim.fn.winrestcmd()
+		-- 最大化当前窗口
+		vim.cmd("wincmd _")
+		vim.cmd("wincmd |")
+	end
+end
+
+return M

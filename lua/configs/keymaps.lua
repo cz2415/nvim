@@ -30,8 +30,8 @@ map("n", "<A-l>", [[<C-w>l]], opts)
 -- resize window
 map("n", "<A-J>", ":resize -1<CR>", opts)
 map("n", "<A-K>", ":resize +1<CR>", opts)
-map("n", "<A-H>", ":vertical resize +1<CR>", opts)
-map("n", "<A-L>", ":vertical resize -1<CR>", opts)
+map("n", "<A-L>", ":vertical resize +1<CR>", opts)
+map("n", "<A-H>", ":vertical resize -1<CR>", opts)
 
 -- toggle wrap
 map("n", "<A-z>", ":set wrap!<CR>", opts)
@@ -49,6 +49,7 @@ wk.add({
 		mode = "n",
 	},
 	{ "zn", "<cmd>NoNeckPain<cr>", desc = "Toggle neck mode", mode = "n" },
+	{ "zm",function() require("configs.functions").toggle_maximize() end, desc = "Toggle neck mode", mode = "n" },
 	{ "<leader>o", "<cmd>Navbuddy<cr>", desc = "Outline" },
 	-- buffer
 	{ "<leader>a", group = "AI" },
@@ -83,6 +84,7 @@ wk.add({
 	-- quit
 	{ "<leader>q", group = "Quit" },
 	{ "<leader>qq", "<cmd>qall<cr>", desc = "Quit All" },
+	{ "<leader>qr", "<cmd>restart<cr>", desc = "Restart" },
 	-- run
 	{ "<leader>r", group = "Run Code" },
 	{
