@@ -9,6 +9,7 @@ return {
             "D:/work/01.liming/02.code/lm-master",
             "D:/work/01.liming/02.code/bbom-app-lm",
             "D:/chen/code/nvim-jdbc/nvim-jdbc-lua",
+            "D:/chen/code/WeChatProjects/pic-stitcher-app",
             "D:/chen/obsidian"
         },
         picker = {
