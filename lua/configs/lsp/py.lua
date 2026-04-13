@@ -1,5 +1,8 @@
+local common = require("configs.lsp.common")
+
 vim.lsp.config("pylsp", {
 	on_attach = function() end,
+	capabilities = common.capabilities,
 	filetypes = { "python" },
 	settings = {
 		pylsp = {
@@ -11,3 +14,5 @@ vim.lsp.config("pylsp", {
 		},
 	},
 })
+
+vim.lsp.enable({ "pylsp" })

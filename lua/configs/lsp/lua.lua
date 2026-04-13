@@ -1,12 +1,8 @@
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-local status_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if status_cmp then
-	capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
-end
+local common = require("configs.lsp.common")
 
 vim.lsp.config("lua_ls", {
 	on_attach = function() end,
-	capabilities = capabilities,
+	capabilities = common.capabilities,
 	filetypes = { "lua" },
 	settings = {
 		Lua = {
