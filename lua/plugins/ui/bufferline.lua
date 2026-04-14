@@ -1,6 +1,6 @@
 return {
 	"akinsho/bufferline.nvim",
-	vsersion = "*",
+	version = "*",
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
 		{ "tiagovla/scope.nvim", config = true },

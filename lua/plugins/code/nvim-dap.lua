@@ -61,7 +61,7 @@ return {
 			host = "localhost",
 			port = "${port}",
 			executable = {
-				command = "D:\\software\\installer\\nvm\\v20.13.1\\node.exe",
+				command = vim.fn.exepath("node"),
 				args = {
 					"C:\\Users\\cz2415\\AppData\\Local\\nvim-data\\mason\\packages\\js-debug-adapter\\js-debug\\src\\dapDebugServer.js",
 					"${port}",
