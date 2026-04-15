@@ -3,6 +3,7 @@ local lsp_files = {
 	"js",
 	"py",
 	"md",
+	"java",
 }
 
 for _, file in ipairs(lsp_files) do

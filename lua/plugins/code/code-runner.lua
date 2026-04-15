@@ -5,8 +5,9 @@ return {
 			filetype = {
 				java = {
 					"cd $dir &&",
-					"javac $fileName &&",
-					"java $fileNameWithoutExt",
+					-- "javac $fileName &&",
+					-- "java $fileNameWithoutExt",
+					"java $fileName",
 				},
 				python = "python -u",
 				lua = "lua",
