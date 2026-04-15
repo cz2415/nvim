@@ -39,6 +39,10 @@ return {
 			default = { "lsp", "path", "snippets", "buffer" },
 		},
 		cmdline = {
+			keymap = {
+				preset = "cmdline",
+				["<CR>"] = { "accept", "fallback" },
+			},
 			completion = { menu = { auto_show = true } },
 		},
 		fuzzy = { implementation = "prefer_rust_with_warning" },
