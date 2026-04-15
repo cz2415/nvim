@@ -32,6 +32,11 @@ return {
 					shade = 5,
 				},
 			},
+			modes = {
+				char = {
+					keys = { "f", "F" },
+				},
+			},
 		})
 	end,
 }
