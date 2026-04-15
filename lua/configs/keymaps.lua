@@ -15,7 +15,7 @@ map("v", "<", "<gv", opts)
 map("v", ">", ">gv", opts)
 
 -- use <c-c> to exit terminal-mode
-map("t", "<c-c>", [[<C-\><C-n>]], opts)
+map("t", "<A-c>", [[<C-\><C-n>]], opts)
 
 -- windows navigate, ALT+{h,j,k,l}
 map("t", "<A-h>", [[<C-\><C-N><C-w>h]], opts)
@@ -49,7 +49,14 @@ wk.add({
 		mode = "n",
 	},
 	{ "zn", "<cmd>NoNeckPain<cr>", desc = "Toggle neck mode", mode = "n" },
-	{ "zm",function() require("configs.functions").toggle_maximize() end, desc = "Toggle neck mode", mode = "n" },
+	{
+		"zm",
+		function()
+			require("configs.functions").toggle_maximize()
+		end,
+		desc = "Toggle neck mode",
+		mode = "n",
+	},
 	{ "<leader>o", "<cmd>Navbuddy<cr>", desc = "Outline" },
 	-- buffer
 	{ "<leader>a", group = "AI" },
@@ -85,6 +92,30 @@ wk.add({
 	{ "<leader>q", group = "Quit" },
 	{ "<leader>qq", "<cmd>qall<cr>", desc = "Quit All" },
 	{ "<leader>qr", "<cmd>restart<cr>", desc = "Restart" },
+	-- session
+	{ "<leader>p", group = "Session" },
+	{
+		"<leader>ps",
+		function()
+			require("mini.sessions").select()
+		end,
+		desc = "Select Session",
+	},
+	{
+		"<leader>pw",
+		function()
+			local name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t"):gsub("[\\/:]", "_")
+			require("mini.sessions").write(name, { force = true })
+		end,
+		desc = "Write Session",
+	},
+	{
+		"<leader>pd",
+		function()
+			require("mini.sessions").select("delete")
+		end,
+		desc = "Delete Session",
+	},
 	-- run
 	{ "<leader>r", group = "Run Code" },
 	{
@@ -96,17 +127,16 @@ wk.add({
 	},
 	{ "<leader>rc", "<cmd>RunCode<cr>", desc = "Run Current" },
 	-- terminal
-	-- { "<c-t>", group = "Terminal" },
-	-- { "<c-t>t", "<cmd>ToggleTerm<cr>", desc = "Toggle Term" },
-	-- { "<c-t>s", "<cmd>TermSelect<cr>", desc = "Select Term" },
-	-- { "<c-t>r", "<cmd>ToggleTermSetName<cr>", desc = "Rename Term" },
-	-- { "<c-t>g", "<cmd>ToggletermLazygit<cr>", desc = "gitui" },
-	-- { "<c-t>1", "<cmd>1ToggleTerm<cr>", desc = "1st Term" },
-	-- { "<c-t>2", "<cmd>2ToggleTerm<cr>", desc = "2st Term" },
-	-- { "<c-t>3", "<cmd>3ToggleTerm<cr>", desc = "3st Term" },
-	-- { "<c-t>4", "<cmd>4ToggleTerm<cr>", desc = "4st Term" },
-	-- { "<c-t>5", "<cmd>5ToggleTerm<cr>", desc = "5st Term" },
-	{ "<c-t>", "<cmd>ToggleTerm<cr>", desc = "LazyGit", mode = "n" },
+	{ "<c-t>", group = "Terminal" },
+	{ "<c-t>t", "<cmd>ToggleTerm<cr>", desc = "Toggle Term" },
+	{ "<c-t>s", "<cmd>TermSelect<cr>", desc = "Select Term" },
+	{ "<c-t>r", "<cmd>ToggleTermSetName<cr>", desc = "Rename Term" },
+	{ "<c-t>1", "<cmd>1ToggleTerm<cr>", desc = "1st Term" },
+	{ "<c-t>2", "<cmd>2ToggleTerm<cr>", desc = "2st Term" },
+	{ "<c-t>3", "<cmd>3ToggleTerm<cr>", desc = "3st Term" },
+	{ "<c-t>4", "<cmd>4ToggleTerm<cr>", desc = "4st Term" },
+	{ "<c-t>5", "<cmd>5ToggleTerm<cr>", desc = "5st Term" },
+	-- { "<c-t>", "<cmd>ToggleTerm<cr>", desc = "LazyGit", mode = "n" },
 	{ "<c-g>", "<cmd>ToggletermLazygit<cr>", desc = "LazyGit", mode = "n" },
 	{ "<c-g>", [[<C-\><C-n><cmd>ToggletermLazygit<CR>]], desc = "LazyGit", mode = "t" },
 
