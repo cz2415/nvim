@@ -39,6 +39,6 @@ return {
 		cmdline = {
 			completion = { menu = { auto_show = true } },
 		},
-		fuzzy = { implementation = "prefer_rust_with_warning" },
+		fuzzy = { implementation = "lua" },
 	},
 }
