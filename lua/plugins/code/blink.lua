@@ -17,13 +17,11 @@ return {
 			menu = {
 				border = "rounded",
 				draw = {
-					columns = { { "kind_icon" }, { "label", "label_description", gap = 1 }, { "source_name" } },
+					columns = { { "kind_icon",  gap = 1 }, { "label", gap = 1 }, { "kind_text" } },
 					components = {
-						source_name = {
-							text = function(ctx)
-								return ctx.source_name
-							end,
-							highlight = "Comment", -- 使用注释颜色，更柔和
+						kind_text = {
+							text = function(ctx) return string.format("[%s]", ctx.kind) end,
+							highlight = function(ctx) return "BlinkCmpKind" .. ctx.kind end,
 						},
 					},
 				},
@@ -39,10 +37,6 @@ return {
 			default = { "lsp", "path", "snippets", "buffer" },
 		},
 		cmdline = {
-			keymap = {
-				preset = "cmdline",
-				["<CR>"] = { "accept", "fallback" },
-			},
 			completion = { menu = { auto_show = true } },
 		},
 		fuzzy = { implementation = "prefer_rust_with_warning" },
