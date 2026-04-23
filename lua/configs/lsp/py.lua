@@ -1,18 +1,19 @@
 local common = require("configs.lsp.common")
 
-vim.lsp.config("pylsp", {
-	on_attach = function() end,
+vim.lsp.config("pyright", {
+	on_attach = common.on_attach,
 	capabilities = common.capabilities,
 	filetypes = { "python" },
 	settings = {
-		pylsp = {
-			plugins = {
-				mccabe = { enabled = false },
-				pycodestyle = { enabled = false },
-				pyflakes = { enabled = false },
+		pyright = {
+			disableOrganizeImports = false,
+			analysis = {
+				typeCheckingMode = "basic",
+				autoSearchPaths = true,
+				useLibraryCodeForTypes = true,
 			},
 		},
 	},
 })
 
-vim.lsp.enable({ "pylsp" })
+vim.lsp.enable({ "pyright" })

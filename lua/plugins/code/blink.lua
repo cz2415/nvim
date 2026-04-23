@@ -2,6 +2,7 @@ return {
 	"saghen/blink.cmp",
 	dependencies = {
 		"rafamadriz/friendly-snippets",
+		"saghen/blink.lib",
 	},
 	opts = {
 		keymap = {
@@ -17,11 +18,15 @@ return {
 			menu = {
 				border = "rounded",
 				draw = {
-					columns = { { "kind_icon",  gap = 1 }, { "label", gap = 1 }, { "kind_text" } },
+					columns = { { "kind_icon", gap = 1 }, { "label", gap = 1 }, { "kind_text" } },
 					components = {
 						kind_text = {
-							text = function(ctx) return string.format("[%s]", ctx.kind) end,
-							highlight = function(ctx) return "BlinkCmpKind" .. ctx.kind end,
+							text = function(ctx)
+								return string.format("[%s]", ctx.kind)
+							end,
+							highlight = function(ctx)
+								return "BlinkCmpKind" .. ctx.kind
+							end,
 						},
 					},
 				},

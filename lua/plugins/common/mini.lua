@@ -45,6 +45,9 @@ return {
 					width_nofocus = 15,
 					width_preview = 55,
 				},
+				mappings = {
+					synchronize = "<C-s>",
+				},
 			})
 		end,
 	},
@@ -63,7 +66,7 @@ return {
 				autoread = true,
 				autowrite = true,
 				directory = vim.fn.stdpath("data") .. "/session",
-                file = '',
+				file = "",
 				force = { read = false, write = true, delete = true },
 				hooks = {
 					pre = {

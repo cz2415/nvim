@@ -1,7 +1,8 @@
 return {
 	"mfussenegger/nvim-dap",
+	lazy = true,
 	dependencies = {
-		"jbyuki/one-small-step-for-vimkind", -- OSV
+		"jbyuki/one-small-step-for-vimkind",
 		"nvim-neotest/nvim-nio",
 		"jay-babu/mason-nvim-dap.nvim",
 		{

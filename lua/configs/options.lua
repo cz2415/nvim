@@ -18,6 +18,7 @@ vim.opt.hidden = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.autochdir = false
+vim.opt.updatetime = 300
 vim.opt.wildmode = "list:longest,full"
 vim.opt.langmenu = "en_US"
 vim.opt.wrap = false

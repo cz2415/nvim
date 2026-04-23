@@ -451,57 +451,23 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local bufnr = args.buf
 
-		-- 支持的文件类型
-		local filetypes = {
-			"typescript",
-			"typescriptreact",
-			"typescript.tsx",
-			"javascriptreact",
-			"javascript",
-			"python",
-			"lua",
-			-- "java",
-			"vue",
-		}
-
-		-- 检查文件类型
-		local ft = vim.bo[bufnr].filetype
-		if not vim.tbl_contains(filetypes, ft) then
-			return
-		end
-
-		-- 设置快捷键
 		wk.add({
+
 			{ "g", group = "go to " },
 			{ "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", desc = "go to definition" },
-			{ "ge", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "go to next diagnostic" },
-			{ "gE", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "go to prev diagnostic" },
+			{ "gl", "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>", desc = "show error description" },
+			{ "ge", "<cmd>lua vim.diagnostic.jump({ count = 1 })<cr>", desc = "go to next diagnostic" },
+			{ "gE", "<cmd>lua vim.diagnostic.jump({ count = -1 })<cr>", desc = "go to prev diagnostic" },
+			{ "gs", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", desc = "go to diagnostic list" },
+
 			{ "<leader>c", group = "code" },
 			{ "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "code action" },
 			{ "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "rename" },
 
 			{ "<leader>d", group = "debug" },
-			{
-				"<leader>dt",
-				function()
-					require("dap").toggle_breakpoint()
-				end,
-				desc = "toggle breakpoint",
-			},
-			{
-				"<leader>du",
-				function()
-					require("dapui").toggle()
-				end,
-				desc = "Toggle DAP UI",
-			},
-			{
-				"<leader>de",
-				function()
-					require("dapui").eval()
-				end,
-				desc = "Eval expression",
-			},
+			{ "<leader>dt", "<cmd>lua require('dap').toggle_breakpoint()<cr>", desc = "toggle breakpoint" },
+			{ "<leader>du", "<cmd>lua require('dap'); require('dapui').toggle()<cr>", desc = "toggle debug ui" },
+			{ "<leader>de", "<cmd>lua require('dap'); require('dapui').eval()<cr>", desc = "eval expression" },
 
 			{ "<C-k>", '<cmd>lua require("dap").continue()<cr>', desc = "Continue" },
 			{ "<C-j>", '<cmd>lua require("dap").step_over()<cr>', desc = "Step Over" },

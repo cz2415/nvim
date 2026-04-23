@@ -1,7 +1,7 @@
 local common = require("configs.lsp.common")
 
 vim.lsp.config("lua_ls", {
-	on_attach = function() end,
+	on_attach = common.on_attach,
 	capabilities = common.capabilities,
 	filetypes = { "lua" },
 	settings = {
