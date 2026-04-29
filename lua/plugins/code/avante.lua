@@ -5,6 +5,11 @@ return {
 		version = false, -- set this if you want to always pull the latest change
 		opts = {
 			provider = "deepseek",
+			mappings = {
+				submit = {
+					insert = "<CR>",
+				},
+			},
 			providers = {
 				deepseek = {
 					__inherited_from = "openai",
