@@ -4,6 +4,7 @@ local lsp_files = {
 	"py",
 	"md",
 	"java",
+	"json",
 }
 
 for _, file in ipairs(lsp_files) do
@@ -12,7 +13,7 @@ end
 
 -- 配置诊断显示样式（直接在 config 里设置图标）
 vim.diagnostic.config({
-	virtual_text = false,  -- 关闭虚拟文本显示
+	virtual_text = false, -- 关闭虚拟文本显示
 	signs = {
 		text = {
 			[vim.diagnostic.severity.ERROR] = "",
@@ -25,8 +26,8 @@ vim.diagnostic.config({
 	update_in_insert = false,
 	severity_sort = true,
 	float = {
-		border = "rounded",  -- 圆角边框
-		source = "if_many",   -- 显示来源
+		border = "rounded", -- 圆角边框
+		source = "if_many", -- 显示来源
 		header = "",
 		prefix = "",
 	},
