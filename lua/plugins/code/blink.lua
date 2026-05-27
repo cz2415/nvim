@@ -44,6 +44,21 @@ return {
 		cmdline = {
 			completion = { menu = { auto_show = true } },
 		},
-		fuzzy = { implementation = "lua" },
+		fuzzy = {
+			implementation = "lua",
+			sorts = {
+				function(a, b)
+					local kind = require("blink.cmp.types").CompletionItemKind
+					if a.kind == kind.Field and b.kind == kind.Snippet then
+						return true
+					end
+					if a.kind == kind.Snippet and b.kind == kind.Field then
+						return false
+					end
+				end,
+				"score",
+				"sort_text",
+			},
+		},
 	},
 }
