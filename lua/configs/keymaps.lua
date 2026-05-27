@@ -46,7 +46,7 @@ wk.add({
 		"==",
 		'<cmd>:lua require("conform").format {async = true, lsp_fallback = true}<cr>',
 		desc = "Format",
-		mode = "n",
+		mode = { "n", "v" },
 	},
 	{ "zn", "<cmd>NoNeckPain<cr>", desc = "Toggle neck mode", mode = "n" },
 	{

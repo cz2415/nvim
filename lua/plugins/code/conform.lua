@@ -13,7 +13,15 @@ return {
 				javascriptreact = { "prettier" },
 				javascript = { "prettier" },
 				vue = { "prettier" },
-				python = { "black" }
+				python = { "black" },
+				sql = { "sql_formatter" },
+			},
+			formatters = {
+				sql_formatter = {
+					command = "sql-formatter",
+					args = { "-l", "sql" },
+					stdin = true,
+				},
 			},
 		})
 	end,
