@@ -78,14 +78,14 @@ wk.add({
 	{ "<leader>bp", "<cmd>BufferLinePick<cr>", desc = "Buffer Pick" },
 	-- file
 	{ "<leader>f", group = "File" },
-	{ "<leader>fT", "<cmd>NvimTreeFindFile<cr>", desc = "Find In Tree" },
+	{ "<leader>fT", "<cmd>lua Snacks.explorer.reveal()<cr>", desc = "Find In Tree" },
 	{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
 	{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
 	{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags" },
 	{ "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
 	{ "<leader>fp", "<cmd>NeovimProjectDiscover<cr>", desc = "Switch Project" },
 	{ "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
-	{ "<leader>ft", "<cmd>NvimTreeToggle<cr>", desc = "Toggle File Tree" },
+	{ "<leader>ft", "<cmd>lua Snacks.explorer.open()<cr>", desc = "Toggle File Tree" },
 	{ "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", desc = "Mini Files" },
 	{ "<leader>fM", "<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>", desc = "Mini Files Find" },
 	-- quit
@@ -142,6 +142,11 @@ wk.add({
 
 	-- search
 	{ "<leader>s", group = "Search" },
+	{
+		"<leader>s/",
+		"<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>",
+		desc = "search Current Buffer With Telescope",
+	},
 	{ "<leader>sc", "<cmd>set nohlsearch!<cr>", desc = "No Hlsearch" },
 	{
 		"<leader>sf",
