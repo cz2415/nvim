@@ -100,4 +100,40 @@ M.toggle_maximize = function()
 	end
 end
 
+local function get_visual_selection()
+	local start_pos = vim.fn.getpos("'<")
+	local end_pos = vim.fn.getpos("'>")
+	local start_row, start_col = start_pos[2], start_pos[3]
+	local end_row, end_col = end_pos[2], end_pos[3]
+
+	if start_row > end_row or (start_row == end_row and start_col > end_col) then
+		start_row, end_row = end_row, start_row
+		start_col, end_col = end_col, start_col
+	end
+
+	local lines = vim.api.nvim_buf_get_lines(0, start_row - 1, end_row, false)
+	if vim.tbl_isempty(lines) then
+		return ""
+	end
+
+	lines[1] = string.sub(lines[1], start_col)
+	if #lines == 1 then
+		lines[1] = string.sub(lines[1], 1, end_col - start_col + 1)
+	else
+		lines[#lines] = string.sub(lines[#lines], 1, end_col)
+	end
+
+	return vim.trim(table.concat(lines, " "):gsub("%s+", " "))
+end
+
+M.live_grep_visual_selection = function()
+	local text = get_visual_selection()
+	if text == "" then
+		vim.notify("No visual selection to search", vim.log.levels.WARN)
+		return
+	end
+
+	require("telescope.builtin").live_grep({ default_text = text })
+end
+
 return M

@@ -3,6 +3,8 @@ return {
 	dir = "D:\\chen\\code\\nvim-jdbc\\nvim-jdbc-lua",
 	ft = "sql",
 	config = function()
-		require("nvim-jdbc").setup()
+		require("nvim-jdbc").setup({
+            log_timing = true
+        })
 	end,
 }

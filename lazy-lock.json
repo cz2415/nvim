@@ -6,6 +6,7 @@
   "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },
   "checkmate.nvim": { "branch": "main", "commit": "e57c8b502ab3e77e478e16460fcc2d2a16082f73" },
   "code_runner.nvim": { "branch": "main", "commit": "eed10eb4953bc172d7652f30d289a4e575028a98" },
+  "codecompanion.nvim": { "branch": "main", "commit": "57989aca2e92083b16a2500ad47f285d82d5c43b" },
   "codeium.vim": { "branch": "main", "commit": "3c0a4f8a7be75113a6e19be13b7cc37210d6e26a" },
   "conform.nvim": { "branch": "master", "commit": "dca1a190aa85f9065979ef35802fb77131911106" },
   "copilot.lua": { "branch": "master", "commit": "3b95c93d804077dd409d62a6da53a8c92ac8f415" },

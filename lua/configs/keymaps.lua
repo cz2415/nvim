@@ -81,6 +81,14 @@ wk.add({
 	{ "<leader>fT", "<cmd>lua Snacks.explorer.reveal()<cr>", desc = "Find In Tree" },
 	{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
 	{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
+	{
+		"<leader>fg",
+		function()
+			require("configs.functions").live_grep_visual_selection()
+		end,
+		desc = "Live Grep Selection",
+		mode = "v",
+	},
 	{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags" },
 	{ "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
 	{ "<leader>fp", "<cmd>NeovimProjectDiscover<cr>", desc = "Switch Project" },
@@ -459,7 +467,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		wk.add({
 
 			{ "g", group = "go to " },
-			{ "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", desc = "go to definition" },
+			{ "gd", "<cmd>Telescope lsp_definitions<cr>", desc = "go to definition" },
+			{ "gr", "<cmd>Telescope lsp_references<cr>", desc = "go to references" },
 			{ "gl", "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>", desc = "show error description" },
 			{ "ge", "<cmd>lua vim.diagnostic.jump({ count = 1 })<cr>", desc = "go to next diagnostic" },
 			{ "gE", "<cmd>lua vim.diagnostic.jump({ count = -1 })<cr>", desc = "go to prev diagnostic" },
