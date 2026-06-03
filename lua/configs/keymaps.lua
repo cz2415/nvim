@@ -57,7 +57,7 @@ wk.add({
 		desc = "Toggle neck mode",
 		mode = "n",
 	},
-	{ "<leader>o", "<cmd>Navbuddy<cr>", desc = "Outline" },
+	{ "<leader>o", "<cmd>lua Snacks.picker.lsp_symbols()<cr>", desc = "Outline" },
 	-- buffer
 	{ "<leader>a", group = "AI" },
 	{ "<leader>aa", "<cmd>AvanteAsk<cr>", desc = "Ask AI about your code", mode = "v" },
