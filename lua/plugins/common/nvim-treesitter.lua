@@ -23,6 +23,7 @@ return {
 			"vim",
 			"vimdoc",
 			"http",
+			"regex",
 		}
 
 		local treesitter = require("nvim-treesitter")

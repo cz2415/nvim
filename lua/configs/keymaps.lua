@@ -69,7 +69,7 @@ wk.add({
 	-- buffer
 	{ "<leader>b", group = "Buffer" },
 	{ "<leader>bC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others" },
-	{ "<leader>bb", "<cmd>Telescope buffers<CR>", desc = "Switch Buffer" },
+	{ "<leader>bb", "<cmd>lua Snacks.picker.buffers()<cr>", desc = "Switch Buffer" },
 	{ "<leader>bc", "<cmd>bd<cr>", desc = "Close Buffer" },
 	{ "<leader>bh", "<cmd>BufferLineMovePrev<cr>", desc = "Move Prev" },
 	{ "<leader>bj", "<cmd>BufferLineCloseLeft<cr>", desc = "Close Left" },
@@ -79,8 +79,8 @@ wk.add({
 	-- file
 	{ "<leader>f", group = "File" },
 	{ "<leader>fT", "<cmd>lua Snacks.explorer.reveal()<cr>", desc = "Find In Tree" },
-	{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
-	{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
+	{ "<leader>ff", "<cmd>lua Snacks.picker.files()<cr>", desc = "Find File" },
+	{ "<leader>fg", "<cmd>lua Snacks.picker.grep()<cr>", desc = "Live Grep" },
 	{
 		"<leader>fg",
 		function()
@@ -89,10 +89,10 @@ wk.add({
 		desc = "Live Grep Selection",
 		mode = "v",
 	},
-	{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags" },
+	{ "<leader>fh", "<cmd>lua Snacks.picker.help()<cr>", desc = "Help Tags" },
 	{ "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
 	{ "<leader>fp", "<cmd>NeovimProjectDiscover<cr>", desc = "Switch Project" },
-	{ "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
+	{ "<leader>fr", "<cmd>lua Snacks.picker.recent()<cr>", desc = "Recent Files" },
 	{ "<leader>ft", "<cmd>lua Snacks.explorer.open()<cr>", desc = "Toggle File Tree" },
 	{ "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", desc = "Mini Files" },
 	{ "<leader>fM", "<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>", desc = "Mini Files Find" },
@@ -152,8 +152,15 @@ wk.add({
 	{ "<leader>s", group = "Search" },
 	{
 		"<leader>s/",
-		"<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>",
-		desc = "search Current Buffer With Telescope",
+		function()
+			require("snacks").picker.lines({
+				layout = {
+					preset = "telescope",
+                    preview = true
+				},
+			})
+		end,
+		desc = "search Current Buffer With Snacks",
 	},
 	{ "<leader>sc", "<cmd>set nohlsearch!<cr>", desc = "No Hlsearch" },
 	{
@@ -467,12 +474,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		wk.add({
 
 			{ "g", group = "go to " },
-			{ "gd", "<cmd>Telescope lsp_definitions<cr>", desc = "go to definition" },
-			{ "gr", "<cmd>Telescope lsp_references<cr>", desc = "go to references" },
+			{ "gd", "<cmd>lua Snacks.picker.lsp_definitions()<cr>", desc = "go to definition" },
+			{ "gr", "<cmd>lua Snacks.picker.lsp_references()<cr>", desc = "go to references" },
 			{ "gl", "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>", desc = "show error description" },
 			{ "ge", "<cmd>lua vim.diagnostic.jump({ count = 1 })<cr>", desc = "go to next diagnostic" },
 			{ "gE", "<cmd>lua vim.diagnostic.jump({ count = -1 })<cr>", desc = "go to prev diagnostic" },
-			{ "gs", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", desc = "go to diagnostic list" },
+			{ "gs", "<cmd>lua Snacks.picker.diagnostics()<cr>", desc = "go to diagnostic list" },
 
 			{ "<leader>c", group = "code" },
 			{ "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "code action" },

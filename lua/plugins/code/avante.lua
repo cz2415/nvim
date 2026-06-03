@@ -25,7 +25,16 @@ return {
 		build = "powershell -ExecutionPolicy Bypass -NoProfile -File Build.ps1 -BuildFromSource false",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
-			"stevearc/dressing.nvim",
+			{
+				"stevearc/dressing.nvim",
+				opts = {
+					select = { enabled = false },
+				},
+				config = function(_, opts)
+					require("dressing").setup(opts)
+					vim.ui.select = require("snacks").picker.select
+				end,
+			},
 			"nvim-lua/plenary.nvim",
 			"MunifTanjim/nui.nvim",
 			--- The below dependencies are optional,

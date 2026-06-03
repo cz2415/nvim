@@ -133,7 +133,7 @@ M.live_grep_visual_selection = function()
 		return
 	end
 
-	require("telescope.builtin").live_grep({ default_text = text })
+    require("snacks").picker.grep({ search = text })
 end
 
 return M

@@ -5,6 +5,13 @@ return {
 	opts = {
 		explorer = { enabled = true },
 		quickfile = { enabled = true },
+		picker = {
+			enabled = true,
+			ui_select = true,
+			layout = {
+				preset = "telescope",
+			},
+		},
 	},
 	keys = {},
 	init = function() end,
