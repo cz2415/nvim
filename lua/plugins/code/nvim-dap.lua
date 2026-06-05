@@ -18,7 +18,23 @@ return {
 		local dapui = require("dapui")
 
 		--  dap-ui 初始化
-		dapui.setup()
+		dapui.setup({
+			layouts = {
+				{
+					elements = {
+						{ id = "scopes", size = 0.45 },
+						{ id = "stacks", size = 0.25 },
+						{ id = "breakpoints", size = 0.15 },
+						{ id = "watches", size = 0.15 },
+					},
+					size = 36,
+					position = "left",
+				},
+			},
+			controls = {
+				enabled = false,
+			},
+		})
 
 		--  自动打开/关闭 UI
 		dap.listeners.after.event_initialized["dapui_config"] = function()
