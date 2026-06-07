@@ -42,14 +42,14 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 -- )
 
 -- Later, or in another file, when you create keymaps for LSP
-vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(ev)
-		local keymap_opts = { remap = false, silent = true, buffer = ev.buf }
-		vim.keymap.set("n", "<Esc>", function()
-			CloseAllFloating()
-		end, keymap_opts)
-	end,
-})
+-- vim.api.nvim_create_autocmd("LspAttach", {
+-- 	callback = function(ev)
+-- 		local keymap_opts = { remap = false, silent = true, buffer = ev.buf }
+-- 		vim.keymap.set("n", "<Esc>", function()
+-- 			CloseAllFloating()
+-- 		end, keymap_opts)
+-- 	end,
+-- })
 
 -- for work root
 vim.api.nvim_create_autocmd("BufEnter", {

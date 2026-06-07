@@ -156,7 +156,7 @@ wk.add({
 			require("snacks").picker.lines({
 				layout = {
 					preset = "telescope",
-                    preview = true
+					preview = true,
 				},
 			})
 		end,
@@ -235,6 +235,14 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 					require("kulala").from_curl()
 				end,
 				desc = "Paste from curl",
+				buffer = 0,
+			},
+			{
+				"<A-CR>",
+				function()
+					require("kulala").run()
+				end,
+				desc = "Send request",
 				buffer = 0,
 			},
 			{
@@ -454,13 +462,23 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	pattern = "sql",
 	callback = function()
-		wk.add({ { "<Localleader>r", "<cmd>JdbcRun<cr>", desc = "Jdbc Run", mode = { "n", "v", "i" }, buffer = 0 } })
+		wk.add({ { "<A-CR>", "<cmd>JdbcRun<cr>", desc = "Jdbc Run", mode = { "n", "v", "i" }, buffer = 0 } })
 	end,
 })
 
 -- close with q
 vim.api.nvim_create_autocmd({ "FileType" }, {
-	pattern = { "help", "crunner", "dap-repl", "checkhealth", "qf", "grug-far", "AvanteInput", "JdbcResult" },
+	pattern = {
+		"help",
+		"crunner",
+		"dap-repl",
+		"checkhealth",
+		"qf",
+		"grug-far",
+		"AvanteInput",
+		"JdbcResult",
+		"JdbcRowDetail",
+	},
 	callback = function()
 		wk.add({ { "q", "<cmd>bd<cr>", desc = "Close Buffer", buffer = 0 } })
 	end,

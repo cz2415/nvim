@@ -32,6 +32,7 @@ return {
 			interactions = {
 				opts = {
 					date_format = "%Y-%m-%d",
+                    language = "Chinese",
 				},
 				chat = {
 					adapter = {
