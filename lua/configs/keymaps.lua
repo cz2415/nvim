@@ -182,6 +182,14 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 		wk.add({
 			-- {"<Localleader>r", group = "Rest"},
 			{
+				"<leader>o",
+				function()
+					require("kulala").search()
+				end,
+				desc = "Outline",
+				buffer = 0,
+			},
+			{
 				"<Localleader>b",
 				function()
 					require("kulala").scratchpad()
