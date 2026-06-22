@@ -39,6 +39,10 @@ map("n", "<A-z>", ":set wrap!<CR>", opts)
 -- go to last change
 map("n", "ga", "`.", opts)
 
+vim.keymap.set("n", "gf", function()
+	require("configs.functions").smart_gf()
+end, { desc = "Smart gf" })
+
 local wk = require("which-key")
 
 wk.add({
@@ -69,7 +73,7 @@ wk.add({
 	-- buffer
 	{ "<leader>b", group = "Buffer" },
 	{ "<leader>bC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others" },
-	{ "<leader>bb", "<cmd>lua Snacks.picker.buffers()<cr>", desc = "Switch Buffer" },
+	{ "<leader>bb", "<cmd>lua Snacks.picker.buffers({ nofile = true })<cr>", desc = "Switch Buffer" },
 	{ "<leader>bc", "<cmd>bd<cr>", desc = "Close Buffer" },
 	{ "<leader>bh", "<cmd>BufferLineMovePrev<cr>", desc = "Move Prev" },
 	{ "<leader>bj", "<cmd>BufferLineCloseLeft<cr>", desc = "Close Left" },

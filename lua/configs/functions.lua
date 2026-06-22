@@ -133,7 +133,99 @@ M.live_grep_visual_selection = function()
 		return
 	end
 
-    require("snacks").picker.grep({ search = text })
+	require("snacks").picker.grep({ search = text })
+end
+
+local external_file_exts = {
+	xlsx = true,
+	xls = true,
+	docx = true,
+	doc = true,
+	pptx = true,
+	ppt = true,
+	pdf = true,
+}
+
+local function clean_cfile(file)
+	if file == nil then
+		return ""
+	end
+
+	file = vim.trim(file)
+	file = file:gsub("^<%s*", "")
+	file = file:gsub("[%s,;:)%]]+$", "")
+	return file:gsub("^[\"']", ""):gsub("[\"']$", "")
+end
+
+local function is_windows_absolute_path(file)
+	return file:match("^%a:[/\\]") ~= nil or file:match("^\\\\") ~= nil
+end
+
+local function find_windows_file_on_line()
+	local line = vim.api.nvim_get_current_line()
+	local cursor_col = vim.api.nvim_win_get_cursor(0)[2] + 1
+	local fallback = nil
+
+	local function check_pattern(pattern)
+		for start_col, _, end_col in line:gmatch(pattern) do
+			local file = clean_cfile(line:sub(start_col, end_col - 1))
+			if cursor_col >= start_col and cursor_col <= end_col then
+				return file
+			end
+
+			fallback = fallback or file
+		end
+	end
+
+	-- expand("<cfile>") may drop the drive letter in Windows paths like D:\foo\bar.xlsx.
+	local drive_file = check_pattern("()([%a]:[^\"'<>|%c]+)()")
+	if drive_file then
+		return drive_file
+	end
+
+	local unc_file = check_pattern("()(\\\\\\\\[^\"'<>|%c]+)()")
+	if unc_file then
+		return unc_file
+	end
+
+	return fallback
+end
+
+M.smart_gf = function()
+	local file = find_windows_file_on_line() or clean_cfile(vim.fn.expand("<cfile>"))
+
+	if file == "" then
+		vim.cmd("normal! gf")
+		return
+	end
+
+	local ext = vim.fn.fnamemodify(file, ":e"):lower()
+	if external_file_exts[ext] then
+		if vim.fn.filereadable(file) == 0 then
+			vim.notify("File not found: " .. file, vim.log.levels.WARN)
+			return
+		end
+
+		if vim.ui and vim.ui.open then
+			vim.ui.open(file)
+		else
+			vim.fn.jobstart({ "cmd", "/c", "start", "", file }, { detach = true })
+		end
+
+		return
+	end
+
+	if is_windows_absolute_path(file) then
+		if vim.fn.filereadable(file) == 0 then
+			vim.notify("File not found: " .. file, vim.log.levels.WARN)
+			return
+		end
+
+		vim.cmd.edit(vim.fn.fnameescape(file))
+		return
+	end
+
+	vim.cmd("normal! gf")
 end
 
 return M
