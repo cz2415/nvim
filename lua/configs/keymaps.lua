@@ -4,6 +4,7 @@ vim.g.maplocalleader = ";"
 
 local map = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
+local functions = require("configs.functions")
 
 -- standard stlye cut/copy/paste
 map("v", "<C-c>", '"+y', opts)
@@ -40,7 +41,7 @@ map("n", "<A-z>", ":set wrap!<CR>", opts)
 map("n", "ga", "`.", opts)
 
 vim.keymap.set("n", "gf", function()
-	require("configs.functions").smart_gf()
+	functions.smart_gf()
 end, { desc = "Smart gf" })
 
 local wk = require("which-key")
@@ -56,30 +57,25 @@ wk.add({
 	{
 		"zm",
 		function()
-			require("configs.functions").toggle_maximize()
+			functions.toggle_maximize()
 		end,
 		desc = "Toggle neck mode",
 		mode = "n",
 	},
 	{ "<leader>o", "<cmd>lua Snacks.picker.lsp_symbols()<cr>", desc = "Outline" },
-	-- buffer
+	-- AI
 	{ "<leader>a", group = "AI" },
-	{ "<leader>aa", "<cmd>AvanteAsk<cr>", desc = "Ask AI about your code", mode = "v" },
-	{ "<leader>ae", "<cmd>AvanteEdit<cr>", desc = "Edit the selected code blocks", mode = "v" },
-	{ "<leader>ac", "<cmd>AvanteChat<cr>", desc = "Start a chat session" },
-	{ "<leader>af", "<cmd>AvanteFocus<cr>", desc = "Switch focus to/from the sidebar" },
-	{ "<leader>ar", "<cmd>AvanteRefresh<cr>", desc = "Refresh all Avante windows" },
-	{ "<leader>at", "<cmd>AvanteToggle<cr>", desc = "Toggle the Avante sidebar" },
+	{ "<leader>ac", "<cmd>CodeCompanionChat<cr>", desc = "Start a chat session" },
 	-- buffer
-	{ "<leader>b", group = "Buffer" },
-	{ "<leader>bC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others" },
-	{ "<leader>bb", "<cmd>lua Snacks.picker.buffers({ nofile = true })<cr>", desc = "Switch Buffer" },
-	{ "<leader>bc", "<cmd>bd<cr>", desc = "Close Buffer" },
-	{ "<leader>bh", "<cmd>BufferLineMovePrev<cr>", desc = "Move Prev" },
-	{ "<leader>bj", "<cmd>BufferLineCloseLeft<cr>", desc = "Close Left" },
-	{ "<leader>bk", "<cmd>BufferLineCloseRight<cr>", desc = "Close Right" },
-	{ "<leader>bl", "<cmd>BufferLineMoveNext<cr>", desc = "Move Next" },
-	{ "<leader>bp", "<cmd>BufferLinePick<cr>", desc = "Buffer Pick" },
+	{ "t", group = "Buffer" },
+	{ "tC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others" },
+	{ "tt", "<cmd>lua Snacks.picker.buffers({ nofile = true })<cr>", desc = "Switch Buffer" },
+	{ "tc", "<cmd>bd<cr>", desc = "Close Buffer" },
+	{ "th", "<cmd>BufferLineMovePrev<cr>", desc = "Move Prev" },
+	{ "tj", "<cmd>BufferLineCloseLeft<cr>", desc = "Close Left" },
+	{ "tk", "<cmd>BufferLineCloseRight<cr>", desc = "Close Right" },
+	{ "tl", "<cmd>BufferLineMoveNext<cr>", desc = "Move Next" },
+	{ "tp", "<cmd>BufferLinePick<cr>", desc = "Buffer Pick" },
 	-- file
 	{ "<leader>f", group = "File" },
 	{ "<leader>fT", "<cmd>lua Snacks.explorer.reveal()<cr>", desc = "Find In Tree" },
@@ -88,14 +84,13 @@ wk.add({
 	{
 		"<leader>fg",
 		function()
-			require("configs.functions").live_grep_visual_selection()
+			functions.live_grep_visual_selection()
 		end,
 		desc = "Live Grep Selection",
 		mode = "v",
 	},
 	{ "<leader>fh", "<cmd>lua Snacks.picker.help()<cr>", desc = "Help Tags" },
 	{ "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
-	{ "<leader>fp", "<cmd>NeovimProjectDiscover<cr>", desc = "Switch Project" },
 	{ "<leader>fr", "<cmd>lua Snacks.picker.recent()<cr>", desc = "Recent Files" },
 	{ "<leader>ft", "<cmd>lua Snacks.explorer.open()<cr>", desc = "Toggle File Tree" },
 	{ "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", desc = "Mini Files" },
@@ -139,18 +134,95 @@ wk.add({
 	},
 	{ "<leader>rc", "<cmd>RunCode<cr>", desc = "Run Current" },
 	-- terminal
-	{ "<c-t>", group = "Terminal" },
-	{ "<c-t>t", "<cmd>ToggleTerm<cr>", desc = "Toggle Term" },
-	{ "<c-t>s", "<cmd>TermSelect<cr>", desc = "Select Term" },
-	{ "<c-t>r", "<cmd>ToggleTermSetName<cr>", desc = "Rename Term" },
-	{ "<c-t>1", "<cmd>1ToggleTerm<cr>", desc = "1st Term" },
-	{ "<c-t>2", "<cmd>2ToggleTerm<cr>", desc = "2st Term" },
-	{ "<c-t>3", "<cmd>3ToggleTerm<cr>", desc = "3st Term" },
-	{ "<c-t>4", "<cmd>4ToggleTerm<cr>", desc = "4st Term" },
-	{ "<c-t>5", "<cmd>5ToggleTerm<cr>", desc = "5st Term" },
-	-- { "<c-t>", "<cmd>ToggleTerm<cr>", desc = "LazyGit", mode = "n" },
-	{ "<c-g>", "<cmd>ToggletermLazygit<cr>", desc = "LazyGit", mode = "n" },
-	{ "<c-g>", [[<C-\><C-n><cmd>ToggletermLazygit<CR>]], desc = "LazyGit", mode = "t" },
+	{ "<c-t>", group = "Terminal", mode = { "n", "t" } },
+	{
+		"<c-t>t",
+		function()
+			functions.toggle_snacks_terminal()
+		end,
+		desc = "Toggle Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>n",
+		function()
+			functions.new_snacks_terminal()
+		end,
+		desc = "New Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>s",
+		function()
+			functions.pick_snacks_terminal()
+		end,
+		desc = "Select Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>r",
+		function()
+			functions.rename_snacks_terminal()
+		end,
+		desc = "Rename Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>d",
+		function()
+			functions.delete_current_snacks_terminal()
+		end,
+		desc = "Delete Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>1",
+		function()
+			functions.toggle_snacks_terminal(1)
+		end,
+		desc = "1st Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>2",
+		function()
+			functions.toggle_snacks_terminal(2)
+		end,
+		desc = "2nd Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>3",
+		function()
+			functions.toggle_snacks_terminal(3)
+		end,
+		desc = "3rd Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>4",
+		function()
+			functions.toggle_snacks_terminal(4)
+		end,
+		desc = "4th Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-t>5",
+		function()
+			functions.toggle_snacks_terminal(5)
+		end,
+		desc = "5th Term",
+		mode = { "n", "t" },
+	},
+	{
+		"<c-g>",
+		function()
+			functions.open_snacks_lazygit()
+		end,
+		desc = "LazyGit",
+		mode = { "n", "t" },
+	},
 
 	-- search
 	{ "<leader>s", group = "Search" },

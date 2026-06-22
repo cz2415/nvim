@@ -1,88 +1,5 @@
 local M = {}
-
--- close all floating
--- function CloseAllFloating()
--- 	for _, win in ipairs(vim.api.nvim_list_wins()) do
--- 		local config = vim.api.nvim_win_get_config(win)
--- 		if config.relative ~= "" then
--- 			vim.api.nvim_win_close(win, false)
--- 		end
--- 	end
--- end
-
--- toggle lazygit
-local Terminal = require("toggleterm.terminal").Terminal
-local lazygit = Terminal:new({
-	cmd = "lazygit",
-	direction = "float",
-	hidden = true,
-	on_open = function(term)
-		vim.schedule(function()
-			if vim.api.nvim_buf_is_valid(term.bufnr) then
-				vim.cmd("startinsert!")
-			end
-		end)
-	end,
-})
-vim.api.nvim_create_user_command("ToggletermLazygit", function()
-	lazygit:toggle()
-end, { bang = true })
-
-local function get_term_index(current_id, terms)
-	local idx
-	for i, v in ipairs(terms) do
-		if v.id == current_id then
-			idx = i
-		end
-	end
-	return idx
-end
-
-local function go_prev_term()
-	local current_id = vim.b.toggle_number
-	if current_id == nil then
-		return
-	end
-
-	local terms = require("toggleterm.terminal").get_all(true)
-	local prev_index
-
-	local index = get_term_index(current_id, terms)
-	if index > 1 then
-		prev_index = index - 1
-	else
-		prev_index = #terms
-	end
-	require("toggleterm").toggle(terms[index].id)
-	require("toggleterm").toggle(terms[prev_index].id)
-end
-
-local function go_next_term()
-	local current_id = vim.b.toggle_number
-	if current_id == nil then
-		return
-	end
-
-	local terms = require("toggleterm.terminal").get_all(true)
-	local next_index
-
-	local index = get_term_index(current_id, terms)
-	if index == #terms then
-		next_index = 1
-	else
-		next_index = index + 1
-	end
-	require("toggleterm").toggle(terms[index].id)
-	require("toggleterm").toggle(terms[next_index].id)
-end
-
-vim.keymap.set({ "n", "t" }, "<F7>", function()
-	go_prev_term()
-end, { desc = "Toggle term" })
-
-vim.keymap.set({ "n", "t" }, "<F8>", function()
-	go_next_term()
-end, { desc = "Toggle term" })
+local Snacks = require("snacks")
 
 local saved_layout = nil
 M.toggle_maximize = function()
@@ -226,6 +143,242 @@ M.smart_gf = function()
 	end
 
 	vim.cmd("normal! gf")
+end
+
+local function run_from_terminal(callback)
+	local mode = vim.api.nvim_get_mode().mode
+	if mode:sub(1, 1) == "t" then
+		vim.cmd.stopinsert()
+		vim.schedule(callback)
+		return
+	end
+
+	callback()
+end
+
+local last_snacks_terminal_count = 1
+local terminal_win = { border = "rounded", position = "float" }
+
+local function terminal_info(terminal)
+	local info = vim.b[terminal.buf] and vim.b[terminal.buf].snacks_terminal or {}
+	local id = type(info) == "table" and info.id or nil
+	return type(info) == "table" and info or {}, id
+end
+
+local function terminal_name(terminal, id)
+	return vim.b[terminal.buf].snacks_terminal_name or ("Terminal " .. tostring(id or "?"))
+end
+
+local function terminal_cmd(info)
+	return type(info.cmd) == "table" and table.concat(info.cmd, " ") or info.cmd or vim.o.shell
+end
+
+local function is_lazygit_terminal(info)
+	local cmd = terminal_cmd(info):lower()
+	local first = vim.split(cmd, "%s+")[1] or ""
+	local exe = vim.fn.fnamemodify(first, ":t"):lower()
+	return exe == "lazygit" or exe == "lazygit.exe"
+end
+
+local function terminal_items()
+	local items = {}
+	for _, terminal in ipairs(Snacks.terminal.list()) do
+		local info, id = terminal_info(terminal)
+		if not is_lazygit_terminal(info) then
+			items[#items + 1] = {
+				text = string.format("%s  %s  %s", id or "?", terminal_name(terminal, id), info.cwd or vim.fn.getcwd()),
+				terminal = terminal,
+				id = id,
+				buf = terminal.buf,
+				name = terminal_name(terminal, id),
+				cwd = info.cwd or vim.fn.getcwd(),
+				cmd = terminal_cmd(info),
+			}
+		end
+	end
+	table.sort(items, function(a, b)
+		return tostring(a.id or "") < tostring(b.id or "")
+	end)
+	return items
+end
+
+local function focus_terminal(terminal, id)
+	if id then
+		last_snacks_terminal_count = id
+	end
+	for _, other in ipairs(Snacks.terminal.list()) do
+		if other ~= terminal and other:valid() then
+			other:hide()
+		end
+	end
+	terminal:show():focus()
+	vim.cmd.startinsert()
+end
+
+local function close_terminal(terminal)
+	if terminal and terminal:buf_valid() then
+		terminal:close()
+	end
+end
+
+M.toggle_snacks_terminal = function(count)
+	run_from_terminal(function()
+		local win = terminal_win
+
+		if count ~= nil then
+			last_snacks_terminal_count = count
+			Snacks.terminal.toggle(nil, { count = count, win = win })
+			return
+		end
+
+		local current_info = vim.b.snacks_terminal
+		local has_current_count = type(current_info) == "table" and type(current_info.id) == "number"
+		if has_current_count then
+			last_snacks_terminal_count = current_info.id
+		end
+
+		local hidden = false
+		for _, terminal in ipairs(Snacks.terminal.list()) do
+			local info = vim.b[terminal.buf] and vim.b[terminal.buf].snacks_terminal or {}
+			if terminal:valid() and not is_lazygit_terminal(info) then
+				if not has_current_count and type(info) == "table" and type(info.id) == "number" then
+					last_snacks_terminal_count = info.id
+					has_current_count = true
+				end
+				terminal:hide()
+				hidden = true
+			end
+		end
+
+		if hidden then
+			return
+		end
+
+		Snacks.terminal.toggle(nil, { count = last_snacks_terminal_count, win = win })
+	end)
+end
+
+M.new_snacks_terminal = function()
+	run_from_terminal(function()
+		local used = {}
+		for _, terminal in ipairs(Snacks.terminal.list()) do
+			local _, id = terminal_info(terminal)
+			if type(id) == "number" then
+				used[id] = true
+			end
+		end
+
+		local count = 1
+		while used[count] do
+			count = count + 1
+		end
+
+		last_snacks_terminal_count = count
+		Snacks.terminal.toggle(nil, { count = count, win = terminal_win })
+	end)
+end
+
+M.rename_snacks_terminal = function()
+	run_from_terminal(function()
+		local terminal = nil
+		local current_info = vim.b.snacks_terminal
+		if type(current_info) == "table" and type(current_info.id) == "number" then
+			for _, item in ipairs(terminal_items()) do
+				if item.id == current_info.id then
+					terminal = item.terminal
+					break
+				end
+			end
+		end
+
+		terminal = terminal or Snacks.terminal.get(nil, { count = last_snacks_terminal_count, create = false })
+		if not terminal then
+			vim.notify("No terminal to rename", vim.log.levels.WARN)
+			return
+		end
+
+		local _, id = terminal_info(terminal)
+		vim.ui.input({ prompt = "Terminal name: ", default = terminal_name(terminal, id) }, function(name)
+			if name == nil then
+				return
+			end
+			vim.b[terminal.buf].snacks_terminal_name = vim.trim(name) ~= "" and vim.trim(name) or nil
+		end)
+	end)
+end
+
+M.delete_current_snacks_terminal = function()
+	run_from_terminal(function()
+		local current_info = vim.b.snacks_terminal
+		local terminal = nil
+		if type(current_info) == "table" and type(current_info.id) == "number" then
+			for _, item in ipairs(terminal_items()) do
+				if item.id == current_info.id then
+					terminal = item.terminal
+					break
+				end
+			end
+		end
+
+		terminal = terminal or Snacks.terminal.get(nil, { count = last_snacks_terminal_count, create = false })
+		if not terminal then
+			vim.notify("No terminal to delete", vim.log.levels.WARN)
+			return
+		end
+
+		close_terminal(terminal)
+	end)
+end
+
+M.pick_snacks_terminal = function()
+	run_from_terminal(function()
+		local items = terminal_items()
+		if #items == 0 then
+			vim.notify("No terminals", vim.log.levels.WARN)
+			return
+		end
+
+		Snacks.picker.pick({
+			title = "Terminals",
+			items = items,
+			format = "text",
+			preview = false,
+			confirm = function(picker, item)
+				picker:close()
+				if item and item.terminal then
+					vim.schedule(function()
+						focus_terminal(item.terminal, item.id)
+					end)
+				end
+			end,
+			actions = {
+				delete_terminal = function(picker, item)
+					if item and item.terminal then
+						close_terminal(item.terminal)
+						picker:close()
+						vim.schedule(M.pick_snacks_terminal)
+					end
+				end,
+			},
+			win = {
+				input = {
+					keys = {
+						["d"] = { "delete_terminal", mode = { "n", "i" } },
+					},
+				},
+				list = {
+					keys = {
+						["d"] = "delete_terminal",
+					},
+				},
+			},
+		})
+	end)
+end
+M.open_snacks_lazygit = function()
+	run_from_terminal(function()
+		Snacks.lazygit.open()
+	end)
 end
 
 return M
