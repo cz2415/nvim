@@ -8,6 +8,10 @@ return {
 	opts = {
 		keymap = {
 			preset = "enter",
+			["<Tab>"] = false,
+			["<S-Tab>"] = false,
+			["<M-l>"] = { "snippet_forward", "fallback" },
+			["<M-h>"] = { "snippet_backward", "fallback" },
 			["<C-n>"] = { "show", "select_next", "fallback" },
 			["<C-p>"] = { "show", "select_prev", "fallback" },
 		},

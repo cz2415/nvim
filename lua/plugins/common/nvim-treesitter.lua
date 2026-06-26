@@ -6,12 +6,14 @@ return {
 		vim.env.CC = "gcc"
 	end,
 	config = function()
-		local ft = {
+		local parsers = {
 			"sql",
 			"html",
 			"css",
 			"java",
 			"javascript",
+			"typescript",
+			"tsx",
 			"json",
 			"lua",
 			"vue",
@@ -26,12 +28,35 @@ return {
 			"regex",
 		}
 
+		local filetypes = {
+			"sql",
+			"html",
+			"css",
+			"java",
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			"json",
+			"lua",
+			"vue",
+			"markdown",
+			"python",
+			"vim",
+			"help",
+			"http",
+			"regex",
+		}
+
 		local treesitter = require("nvim-treesitter")
 		treesitter.setup()
-		treesitter.install(ft)
+		treesitter.install(parsers)
+
+		vim.treesitter.language.register("javascript", "javascriptreact")
+		vim.treesitter.language.register("tsx", "typescriptreact")
 
 		vim.api.nvim_create_autocmd("FileType", {
-			pattern = ft,
+			pattern = filetypes,
 			callback = function()
 				-- syntax highlighting, provided by Neovim
 				vim.treesitter.start()

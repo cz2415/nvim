@@ -65,7 +65,67 @@ wk.add({
 	{ "<leader>o", "<cmd>lua Snacks.picker.lsp_symbols()<cr>", desc = "Outline" },
 	-- AI
 	{ "<leader>a", group = "AI" },
-	{ "<leader>ac", "<cmd>CodeCompanionChat<cr>", desc = "Start a chat session" },
+	{ "<leader>aa", "<cmd>CodeCompanionActions<cr>", desc = "AI Actions", mode = { "n", "v" } },
+	{ "<leader>aA", "<cmd>CodeCompanionChat Add<cr>", desc = "Add Selection To Chat", mode = "v" },
+	{ "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", desc = "Toggle Chat", mode = { "n", "v" } },
+	{ "<leader>aC", "<cmd>CodeCompanionChat<cr>", desc = "New Chat" },
+	{
+		"<leader>ae",
+		function()
+			require("codecompanion").prompt("explain_code")
+		end,
+		desc = "Explain Code",
+		mode = { "n", "v" },
+	},
+	{
+		"<leader>ar",
+		function()
+			require("codecompanion").prompt("review_code")
+		end,
+		desc = "Review Code",
+		mode = { "n", "v" },
+	},
+	{
+		"<leader>af",
+		function()
+			require("codecompanion").prompt("fix_code")
+		end,
+		desc = "Fix Code Inline",
+		mode = { "n", "v" },
+	},
+	{
+		"<leader>at",
+		function()
+			require("codecompanion").prompt("tests_code")
+		end,
+		desc = "Generate Tests",
+		mode = { "n", "v" },
+	},
+	{
+		"<leader>ad",
+		function()
+			require("codecompanion").prompt("docs_code")
+		end,
+		desc = "Write Docs Inline",
+		mode = { "n", "v" },
+	},
+	{
+		"<leader>aR",
+		function()
+			require("codecompanion").prompt("refactor_code")
+		end,
+		desc = "Refactor Inline",
+		mode = { "n", "v" },
+	},
+	{
+		"<leader>am",
+		function()
+			require("codecompanion").prompt("commit_msg")
+		end,
+		desc = "Commit Message",
+	},
+	{ "<leader>a:", "<cmd>CodeCompanionCmd<cr>", desc = "Generate Vim Command" },
+	{ "<leader>ai", "<cmd>CodeCompanion<cr>", desc = "Inline Prompt", mode = { "n", "v" } },
 	-- buffer
 	{ "t", group = "Buffer" },
 	{ "tC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others" },
@@ -559,9 +619,9 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 		"checkhealth",
 		"qf",
 		"grug-far",
-		"AvanteInput",
 		"JdbcResult",
 		"JdbcRowDetail",
+		"codecompanion",
 	},
 	callback = function()
 		wk.add({ { "q", "<cmd>bd<cr>", desc = "Close Buffer", buffer = 0 } })
