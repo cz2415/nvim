@@ -333,46 +333,52 @@ local function setup_keymaps(bufnr)
 	end
 end
 
-setup_nvim_java()
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "java",
+	once = true,
+	callback = function()
+		setup_nvim_java()
 
-vim.lsp.config("jdtls", {
-	on_attach = function(client, bufnr)
-		common.on_attach(client, bufnr)
-		setup_keymaps(bufnr)
+		vim.lsp.config("jdtls", {
+			on_attach = function(client, bufnr)
+				common.on_attach(client, bufnr)
+				setup_keymaps(bufnr)
+			end,
+			capabilities = common.capabilities,
+			filetypes = { "java" },
+			settings = {
+				java = {
+					configuration = {
+						runtimes = {
+							{
+								name = "JavaSE-1.8",
+								path = java8_home,
+								default = true,
+							},
+							{
+								name = "JavaSE-21",
+								path = java21_home,
+							},
+						},
+						updateBuildConfiguration = "interactive",
+					},
+					import = {
+						gradle = {
+							wrapper = {
+								enabled = true,
+							},
+						},
+					},
+					maven = {
+						downloadSources = true,
+					},
+					project = {
+						importOnFirstTimeStartup = "automatic",
+					},
+				},
+			},
+		})
+
+		vim.lsp.enable("jdtls")
 	end,
-	capabilities = common.capabilities,
-	filetypes = { "java" },
-	settings = {
-		java = {
-			configuration = {
-				runtimes = {
-					{
-						name = "JavaSE-1.8",
-						path = java8_home,
-						default = true,
-					},
-					{
-						name = "JavaSE-21",
-						path = java21_home,
-					},
-				},
-				updateBuildConfiguration = "interactive",
-			},
-			import = {
-				gradle = {
-					wrapper = {
-						enabled = true,
-					},
-				},
-			},
-			maven = {
-				downloadSources = true,
-			},
-			project = {
-				importOnFirstTimeStartup = "automatic",
-			},
-		},
-	},
 })
-
-vim.lsp.enable("jdtls")
