@@ -27,6 +27,7 @@ return {
 	priority = 1000,
 	lazy = false,
 	opts = {
+		bufdelete = { enabled = true },
 		explorer = { enabled = true },
 		lazygit = {
 			enabled = true,

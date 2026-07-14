@@ -130,7 +130,13 @@ wk.add({
 	{ "t", group = "Buffer" },
 	{ "tC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close Others" },
 	{ "tt", "<cmd>lua Snacks.picker.buffers({ nofile = true })<cr>", desc = "Switch Buffer" },
-	{ "tc", "<cmd>bd<cr>", desc = "Close Buffer" },
+	{
+		"tc",
+		function()
+			Snacks.bufdelete()
+		end,
+		desc = "Close Buffer",
+	},
 	{ "th", "<cmd>BufferLineMovePrev<cr>", desc = "Move Prev" },
 	{ "tj", "<cmd>BufferLineCloseLeft<cr>", desc = "Close Left" },
 	{ "tk", "<cmd>BufferLineCloseRight<cr>", desc = "Close Right" },
@@ -276,7 +282,7 @@ wk.add({
 		mode = { "n", "t" },
 	},
 	{
-		"<c-g>",
+		"<c-t>g",
 		function()
 			functions.open_snacks_lazygit()
 		end,
@@ -633,6 +639,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local bufnr = args.buf
 
+		local function remove_unused_references()
+			vim.lsp.buf.code_action({
+				apply = true,
+				context = {
+					-- 触发 LSP 的 source action，用于删除未使用的 import / 引用。
+					only = { "source.removeUnused" },
+					diagnostics = {},
+				},
+			})
+		end
+
 		wk.add({
 
 			{ "g", group = "go to " },
@@ -645,6 +662,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 			{ "<leader>c", group = "code" },
 			{ "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "code action" },
+			{ "<leader>cu", remove_unused_references, desc = "remove unused references" },
 			{ "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "rename" },
 
 			{ "<leader>d", group = "debug" },
