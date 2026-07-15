@@ -38,6 +38,17 @@ return {
 						name = "deepseek",
 						model = "deepseek-v4-flash",
 					},
+					keymaps = {
+						stop = {
+							modes = { n = "<C-c>", i = "<C-c>" },
+							opts = {},
+						},
+						clear = {
+							modes = { n = "<C-l>" },
+							opts = {},
+						},
+						close = false,
+					},
 				},
 				inline = {
 					adapter = {
