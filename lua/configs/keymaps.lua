@@ -132,9 +132,9 @@ wk.add({
 	{ "tt", "<cmd>lua Snacks.picker.buffers({ nofile = true })<cr>", desc = "Switch Buffer" },
 	{
 		"tc",
-		function()
-			Snacks.bufdelete()
-		end,
+			function()
+				require("snacks").bufdelete()
+			end,
 		desc = "Close Buffer",
 	},
 	{ "th", "<cmd>BufferLineMovePrev<cr>", desc = "Move Prev" },
@@ -639,16 +639,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local bufnr = args.buf
 
-		local function remove_unused_references()
-			vim.lsp.buf.code_action({
-				apply = true,
-				context = {
-					-- 触发 LSP 的 source action，用于删除未使用的 import / 引用。
-					only = { "source.removeUnused" },
-					diagnostics = {},
-				},
-			})
-		end
+			local function remove_unused_references()
+				vim.lsp.buf.code_action({
+					apply = true,
+					filter = function(action)
+						return action.kind ~= nil
+							and action.kind:find("source.removeUnused", 1, true) ~= nil
+					end,
+					context = {
+						-- 触发 LSP 的 source action，用于删除未使用的 import / 引用。
+						only = { "source" },
+						diagnostics = {},
+					},
+				})
+			end
 
 		wk.add({
 

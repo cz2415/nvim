@@ -5,6 +5,8 @@ local lsp_files = {
 	"md",
 	"java",
 	"json",
+	"rust",
+	"toml",
 }
 
 for _, file in ipairs(lsp_files) do
@@ -44,12 +46,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 
 		-- 自动 attach navic。
-		-- Vue 文件会同时挂载 cssls/html/eslint/vtsls/vue_ls，navic 只能绑定一个 LSP client。
-		-- 这里跳过辅助 LSP，并在当前 buffer 已绑定 navic 时直接返回，避免重复 attach 的 warning。
+		-- Vue 文件会同时挂载 eslint/vtsls/vue_ls，navic 只能绑定一个 LSP client。
+		-- 优先给 vtsls（script 符号更全），跳过辅助 LSP，并避免重复 attach 的 warning。
 		local navic_ignored_clients = {
 			cssls = true,
 			eslint = true,
 			html = true,
+			vue_ls = true,
 		}
 		if client.server_capabilities.documentSymbolProvider and not navic_ignored_clients[client.name] then
 			local ok, navic = pcall(require, "nvim-navic")

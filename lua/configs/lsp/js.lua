@@ -37,11 +37,44 @@ vim.lsp.config("vue_ls", {
 	on_attach = on_attach,
 	capabilities = capabilities,
 	filetypes = { "vue" },
-	init_options = {
-		vue = {
-			hybridMode = false,
-		},
-	},
+	on_init = function(client)
+		local retries = 0
+
+		local function typescriptHandler(_, result, context)
+			local ts_client = vim.lsp.get_clients({ bufnr = context.bufnr, name = "vtsls" })[1]
+				or vim.lsp.get_clients({ bufnr = context.bufnr, name = "ts_ls" })[1]
+
+			if not ts_client then
+				if retries <= 10 then
+					retries = retries + 1
+					vim.defer_fn(function()
+						typescriptHandler(_, result, context)
+					end, 100)
+				else
+					vim.notify(
+						"Could not find `vtsls` lsp client required by `vue_ls`.",
+						vim.log.levels.ERROR
+					)
+				end
+				return
+			end
+
+			local param = unpack(result)
+			local id, command, payload = unpack(param)
+			ts_client:exec_cmd({
+				title = "vue_request_forward",
+				command = "typescript.tsserverRequest",
+				arguments = {
+					command,
+					payload,
+				},
+			}, { bufnr = context.bufnr }, function(_, r)
+				client:notify("tsserver/response", { { id, r and r.body } })
+			end)
+		end
+
+		client.handlers["tsserver/request"] = typescriptHandler
+	end,
 })
 
 vim.lsp.config("eslint", {
@@ -65,13 +98,13 @@ vim.lsp.config("eslint", {
 vim.lsp.config("html", {
 	on_attach = on_attach,
 	capabilities = capabilities,
-	filetypes = { "html", "vue" },
+	filetypes = { "html" },
 })
 
 vim.lsp.config("cssls", {
 	on_attach = on_attach,
 	capabilities = capabilities,
-	filetypes = { "css", "scss", "less", "vue" },
+	filetypes = { "css", "scss", "less" },
 })
 
 vim.lsp.enable({

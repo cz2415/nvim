@@ -2,9 +2,12 @@ return {
 	"mistweaverco/kulala.nvim",
 	keys = {},
 	ft = { "http", "rest" },
-	opts = {
-		global_keymaps = false,
-		default_env = "local",
+		opts = {
+			global_keymaps = false,
+			default_env = "local",
+			treesitter = {
+				enable = false,
+			},
 		ui = {
 			-- "split" or "float"
 			display_mode = "split",

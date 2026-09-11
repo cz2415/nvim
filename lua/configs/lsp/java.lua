@@ -159,13 +159,14 @@ local function run_in_terminal(command, cwd)
 	end
 
 	stop_java_run()
-	java_run_job = vim.fn.termopen(command, {
-		cwd = cwd,
-		env = java8_env(),
-		on_exit = function()
-			java_run_job = nil
-		end,
-	})
+		java_run_job = vim.fn.jobstart(command, {
+			term = true,
+			cwd = cwd,
+			env = java8_env(),
+			on_exit = function()
+				java_run_job = nil
+			end,
+		})
 	vim.cmd("startinsert")
 end
 

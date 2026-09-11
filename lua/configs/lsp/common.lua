@@ -1,6 +1,5 @@
 local M = {}
 
-local status_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
 local path_sep = package.config:sub(1, 1) == "\\" and ";" or ":"
 
@@ -45,8 +44,9 @@ M.capabilities.textDocument.completion = vim.tbl_deep_extend("force", M.capabili
 	insertTextMode = 1,
 })
 
-if status_cmp then
-	M.capabilities = cmp_nvim_lsp.default_capabilities(M.capabilities)
+local status_blink, blink = pcall(require, "blink.cmp")
+if status_blink then
+	M.capabilities = blink.get_lsp_capabilities(M.capabilities)
 end
 
 M.on_attach = function(client, bufnr) end
