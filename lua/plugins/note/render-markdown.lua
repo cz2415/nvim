@@ -16,6 +16,10 @@ return {
         pipe_table = {
             preset = "round"
         },
+        bullet = {
+            -- 序号/圆点用 moonfly 紫罗兰色（默认 RenderMarkdownBullet 链到 Normal，等于无色）
+            highlight = "MoonflyViolet"
+        },
         checkbox = {
             custom = {
                 todo = {raw = "[-]", rendered = "⧖", highlight = "RenderMarkdownTodo", scope_highlight = nil}
