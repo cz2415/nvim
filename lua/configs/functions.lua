@@ -108,6 +108,30 @@ local function find_windows_file_on_line()
 	return fallback
 end
 
+-- Alt+O: 复制 文件路径:行号 引用 (visual 模式选多行时为 行号范围), 方便指给 AI 看某段内容
+-- 格式: 单行 `path/to/file.lua:42`; 范围 `path/to/file.lua:42-56` (路径相对当前工作目录)
+M.copy_file_line_ref = function()
+	local name = vim.api.nvim_buf_get_name(0)
+	if name == "" then
+		vim.notify("Buffer has no file name", vim.log.levels.WARN)
+		return
+	end
+	local path = vim.fn.fnamemodify(name, ":.")
+	local ref
+	if vim.fn.mode():find("^[vV\22]") then
+		local s, e = vim.fn.line("'<"), vim.fn.line("'>")
+		if s == e then
+			ref = ("%s:%d"):format(path, s)
+		else
+			ref = ("%s:%d-%d"):format(path, s, e)
+		end
+	else
+		ref = ("%s:%d"):format(path, vim.fn.line("."))
+	end
+	vim.fn.setreg("+", ref, "l")
+	vim.notify("Copied: " .. ref, vim.log.levels.INFO)
+end
+
 M.smart_gf = function()
 	local file = find_windows_file_on_line() or clean_cfile(vim.fn.expand("<cfile>"))
 

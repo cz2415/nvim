@@ -37,6 +37,11 @@ map("n", "<A-H>", ":vertical resize -1<CR>", opts)
 -- toggle wrap
 map("n", "<A-z>", ":set wrap!<CR>", opts)
 
+-- Alt+O: 复制 文件路径:行号 引用 (visual 多行为行号范围)
+vim.keymap.set({ "n", "x" }, "<A-o>", function()
+	functions.copy_file_line_ref()
+end, { silent = true, desc = "Copy file:line reference for AI" })
+
 -- go to last change
 map("n", "ga", "`.", opts)
 
@@ -659,6 +664,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			{ "g", group = "go to " },
 			{ "gd", "<cmd>lua Snacks.picker.lsp_definitions()<cr>", desc = "go to definition" },
 			{ "gr", "<cmd>lua Snacks.picker.lsp_references()<cr>", desc = "go to references" },
+			-- 盖掉 nvim 0.11+ 内置默认的 grr (vim.lsp.buf.references 走 quickfix), 统一用 snacks picker
+			{ "grr", "<cmd>lua Snacks.picker.lsp_references()<cr>", desc = "go to references" },
 			{ "gl", "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<cr>", desc = "show error description" },
 			{ "ge", "<cmd>lua vim.diagnostic.jump({ count = 1 })<cr>", desc = "go to next diagnostic" },
 			{ "gE", "<cmd>lua vim.diagnostic.jump({ count = -1 })<cr>", desc = "go to prev diagnostic" },
