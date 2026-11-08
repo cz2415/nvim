@@ -8,10 +8,10 @@ vim.api.nvim_create_autocmd({ "textyankpost" }, {
 	end,
 })
 
--- auto save
+-- auto save (update: 只在 buffer 有实际改动时写盘, 避免空写盘改 mtime)
 vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 	callback = function()
-		vim.fn.execute("silent! write")
+		vim.fn.execute("silent! update")
 	end,
 })
 

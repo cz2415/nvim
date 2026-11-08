@@ -668,11 +668,38 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			{ "<leader>cc", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "code action" },
 			{ "<leader>cu", remove_unused_references, desc = "remove unused references" },
 			{ "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "rename" },
+			{ "<leader>ci", "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", desc = "call hierarchy incoming" },
+			{ "<leader>co", "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", desc = "call hierarchy outgoing" },
+			{ "<leader>ch", "<cmd>lua vim.lsp.buf.typehierarchy('subtypes')<cr>", desc = "type hierarchy subtypes" },
+			{ "<leader>cH", "<cmd>lua vim.lsp.buf.typehierarchy('supertypes')<cr>", desc = "type hierarchy supertypes" },
 
 			{ "<leader>d", group = "debug" },
 			{ "<leader>dt", "<cmd>lua require('dap').toggle_breakpoint()<cr>", desc = "toggle breakpoint" },
 			{ "<leader>du", "<cmd>lua require('dap'); require('dapui').toggle()<cr>", desc = "toggle debug ui" },
 			{ "<leader>de", "<cmd>lua require('dap'); require('dapui').eval()<cr>", desc = "eval expression" },
+			{ "<leader>dq", "<cmd>lua require('dap').terminate()<cr>", desc = "terminate debug" },
+			{
+				"<leader>dc",
+				function()
+					vim.ui.input({ prompt = "Breakpoint condition: " }, function(input)
+						if input and input ~= "" then
+							require("dap").set_breakpoint(input)
+						end
+					end)
+				end,
+				desc = "conditional breakpoint",
+			},
+			{
+				"<leader>dl",
+				function()
+					vim.ui.input({ prompt = "Log point message: " }, function(input)
+						if input and input ~= "" then
+							require("dap").set_breakpoint(nil, nil, input)
+						end
+					end)
+				end,
+				desc = "log point",
+			},
 
 			{ "<C-k>", '<cmd>lua require("dap").continue()<cr>', desc = "Continue" },
 			{ "<C-j>", '<cmd>lua require("dap").step_over()<cr>', desc = "Step Over" },
