@@ -640,9 +640,33 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 
 -- lsp & dap key config
-vim.api.nvim_create_autocmd("LspAttach", {
+	vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local bufnr = args.buf
+
+		-- 盖掉内置 K (vim.lsp.buf.hover, buffer-local): hover 开着时再按 K 关闭。
+		-- 必须 vim.schedule: nvim 核心在 LspAttach 处理流程里设置的默认 K 发生在本回调之后,
+		-- 同步设置会被它覆盖; schedule 后执行必然晚于核心默认值, 必赢
+		vim.schedule(function()
+			if vim.api.nvim_buf_is_valid(bufnr) then
+				vim.keymap.set("n", "K", function()
+					functions.toggle_hover()
+				end, { buffer = bufnr, silent = true, desc = "Hover Docs (toggle)" })
+			end
+		end)
+
+		-- hover 浮窗获得焦点时 (如手动 <C-w>w 进去), K 同样是关闭
+		vim.api.nvim_create_autocmd("WinEnter", {
+			group = vim.api.nvim_create_augroup("HoverToggleInFloat", { clear = true }),
+			callback = function()
+				if vim.w["textDocument/hover"] and vim.api.nvim_win_get_config(0).relative ~= "" then
+					vim.keymap.set("n", "K", function()
+						functions.toggle_hover()
+					end, { buffer = 0, silent = true, desc = "Close Hover" })
+				end
+			end,
+		})
+
 
 			local function remove_unused_references()
 				vim.lsp.buf.code_action({

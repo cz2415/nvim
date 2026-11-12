@@ -706,7 +706,7 @@ local function goto_super()
 		client:exec_cmd({
 			command = super_commands[idx],
 			arguments = arguments,
-		}, bufnr, function(err, result)
+		}, { bufnr = bufnr }, function(err, result)
 			if err or not jump_to_super_location(result, client) then
 				try(idx + 1)
 			end
@@ -714,6 +714,23 @@ local function goto_super()
 	end
 
 	try(1)
+end
+
+-- 手动刷新 Maven 依赖 (IDEA: Reload Maven Project)
+-- jdtls 重新 import 工程, 新引入的依赖会进 classpath (下载耗时看状态栏 lsp_status 进度)
+local function refresh_maven_project()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local client = vim.lsp.get_clients({ bufnr = bufnr, name = "jdtls" })[1]
+	if not client then
+		vim.notify("jdtls not attached", vim.log.levels.WARN)
+		return
+	end
+
+	client:exec_cmd({ command = "java.project.import" }, { bufnr = bufnr }, function(err)
+		if err then
+			vim.notify("Maven refresh failed: " .. tostring(err.message or err), vim.log.levels.ERROR)
+		end
+	end)
 end
 
 local function setup_keymaps(bufnr)
@@ -740,6 +757,7 @@ local function setup_keymaps(bufnr)
 			"Toggle Inlay Hints",
 		},
 		{ "<leader>jb", command("JavaBuildBuildWorkspace"), "Build Workspace" },
+		{ "<leader>ju", refresh_maven_project, "Refresh Maven Project" },
 		{ "<leader>jB", command("JavaBuildCleanWorkspace"), "Clean Workspace" },
 		{ "<leader>jtc", command("JavaTestRunCurrentClass"), "Test Class" },
 		{ "<leader>jtm", command("JavaTestRunCurrentMethod"), "Test Method" },
@@ -805,7 +823,8 @@ vim.api.nvim_create_autocmd("FileType", {
 								path = java21_home,
 							},
 						},
-						updateBuildConfiguration = "interactive",
+						-- pom.xml 保存后自动重新 import (interactive 的确认弹窗在 nvim 里常渲染不出)
+						updateBuildConfiguration = "automatic",
 					},
 					import = {
 						gradle = {

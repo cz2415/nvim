@@ -132,6 +132,22 @@ M.copy_file_line_ref = function()
 	vim.notify("Copied: " .. ref, vim.log.levels.INFO)
 end
 
+-- K toggle hover: hover 浮窗已存在时再按 K 直接关闭 (IDE 式), 否则正常打开
+M.toggle_hover = function()
+	-- 焦点已在 hover 浮窗里 (nvim 0.12 用 textDocument/hover 窗口变量标记): 关闭浮窗
+	if vim.w["textDocument/hover"] and vim.api.nvim_win_get_config(0).relative ~= "" then
+		vim.cmd("wincmd c")
+		return
+	end
+	-- 浮窗开着但焦点还在代码窗口: 直接关
+	local hover_win = vim.b.lsp_floating_preview
+	if hover_win and vim.api.nvim_win_is_valid(hover_win) then
+		vim.api.nvim_win_close(hover_win, true)
+		return
+	end
+	vim.lsp.buf.hover()
+end
+
 M.smart_gf = function()
 	local file = find_windows_file_on_line() or clean_cfile(vim.fn.expand("<cfile>"))
 

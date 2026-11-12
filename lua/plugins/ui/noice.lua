@@ -36,6 +36,11 @@ return {
 				progress = {
 					enabled = false,
 				},
+				-- hover 交给 nvim 0.12 原生实现: keymaps.lua 的 K toggle 依赖原生的
+				-- lsp_floating_preview / textDocument/hover 变量, noice 接管后这些变量不存在
+				hover = {
+					enabled = false,
+				},
 				-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
 				override = {
 					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -52,16 +57,33 @@ return {
 			},
 		})
 
-		vim.keymap.set("n", "<C-f>", function()
-			if not require("noice.lsp").scroll(4) then
-				return "<C-f>"
+		-- 滚动 LSP 文档浮窗: 原生 hover 浮窗优先, 其次 noice 管的窗口 (signature), 都没有则透传原键
+		-- 注意: 映射必须是普通模式而非 expr 模式 — expr 求值期间有 textlock, :normal 会报 E523
+		local function scroll_lsp_doc(down)
+			local win = vim.b.lsp_floating_preview
+			if win and vim.api.nvim_win_is_valid(win) then
+				local key = vim.api.nvim_replace_termcodes(down and "<C-d>" or "<C-u>", true, false, true)
+				vim.fn.win_execute(win, "normal! " .. key)
+				return true
 			end
-		end, { silent = true, expr = true, desc = "Scroll LSP docs down" })
+			local ok, res = pcall(function()
+				return require("noice.lsp").scroll(down and 20 or -20)
+			end)
+			if ok and res then
+				return true
+			end
+			-- 透传: noremap 模式 feedkeys 不会重新触发本映射, 执行原生翻页
+			local key = vim.api.nvim_replace_termcodes(down and "<C-f>" or "<C-b>", true, false, true)
+			vim.api.nvim_feedkeys(key, "n", false)
+			return true
+		end
+
+		vim.keymap.set("n", "<C-f>", function()
+			scroll_lsp_doc(true)
+		end, { silent = true, desc = "Scroll LSP docs down" })
 
 		vim.keymap.set("n", "<C-b>", function()
-			if not require("noice.lsp").scroll(-4) then
-				return "<C-b>"
-			end
-		end, { silent = true, expr = true, desc = "Scroll LSP docs up" })
+			scroll_lsp_doc(false)
+		end, { silent = true, desc = "Scroll LSP docs up" })
 	end,
 }
